@@ -1,0 +1,208 @@
+---
+title: 'Cloud-Native Lab vs On-Premise Lab'
+sidebar_label: 'Cloud vs On-Premise'
+slug: '/cloud_vs_local'
+---
+
+import React from 'react'
+
+export const frontmatter = {
+  title: 'Cloud-Native Lab vs On-Premise Lab',
+  sidebar_label: 'Cloud vs On-Premise',
+  slug: '/cloud_vs_local'
+}
+
+// LanguageSelector component: minimal, accessible, and client-side only.
+// Place this at the top of each chapter .mdx (or import it from a shared component file).
+
+export function LanguageSelector({ defaultLang = 'en' }) {
+  const [lang, setLang] = React.useState(defaultLang)
+
+  React.useEffect(() => {
+    // keep selection in localStorage so user choice persists across pages
+    try { localStorage.setItem('book_lang', lang) } catch (e) {}
+  }, [lang])
+
+  return (
+    <div className="language-selector" aria-label="Choose language" style={{ marginBottom: '1rem' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <button onClick={() => setLang('en')} aria-pressed={lang === 'en'}>English</button>
+        <button onClick={() => setLang('ur')} aria-pressed={lang === 'ur'}>اردو</button>
+        <button onClick={() => setLang('ru')} aria-pressed={lang === 'ru'}>Roman Urdu</button>
+        <button onClick={() => setLang('ar')} aria-pressed={lang === 'ar'}>العربية</button>
+        <button onClick={() => setLang('de')} aria-pressed={lang === 'de'}>Deutsch</button>
+      </div>
+
+      <style>{`
+        .language-selector button { padding: 0.45rem 0.7rem; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08); background: transparent; cursor: pointer; }
+        .language-selector button[aria-pressed="true"] { box-shadow: 0 0 0 3px rgba(0,0,0,0.04) inset; font-weight: 600; }
+      `}</style>
+
+      {/* Hidden inputs to allow CSS-only targeting if desired */}
+      <input type="hidden" id="selected-lang" value={lang} />
+
+      {/* Render translations container statefully */}
+      <div>
+        {/* The translation blocks below are always present in the .mdx (for RAG / offline retrieval),
+            but they include a data-language attribute and are hidden unless selected. */}
+        <div data-language="en" style={{ display: lang === 'en' ? 'block' : 'none' }}>
+          {/* English content will appear here (can duplicate main content or provide summary). */}
+        </div>
+        <div data-language="ur" style={{ display: lang === 'ur' ? 'block' : 'none' }}>
+          {/* Urdu translation block */}
+        </div>
+        <div data-language="ru" style={{ display: lang === 'ru' ? 'block' : 'none' }}>
+          {/* Roman Urdu translation block */}
+        </div>
+        <div data-language="ar" style={{ display: lang === 'ar' ? 'block' : 'none' }}>
+          {/* Arabic translation block */}
+        </div>
+        <div data-language="de" style={{ display: lang === 'de' ? 'block' : 'none' }}>
+          {/* German translation block */}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function Chapter() {
+  return (
+    <>
+      <h1>{frontmatter.title}</h1>
+
+      <LanguageSelector defaultLang={typeof window !== 'undefined' ? (localStorage.getItem('book_lang') || 'en') : 'en'} />
+
+      ## On-Premise Lab
+
+      On-premise robotics labs offer complete control over hardware and data:
+
+      ### Advantages
+      - **Data Security**: Complete control over sensitive data and intellectual property
+      - **Low Latency**: Direct connection to hardware with minimal network delays
+      - **Custom Hardware**: Ability to use specialized equipment and configurations
+      - **Unlimited Bandwidth**: No constraints on data transfer rates
+      - **Offline Operation**: Functionality independent of internet connectivity
+
+      ### Disadvantages
+      - **High Initial Cost**: Significant capital investment in hardware
+      - **Maintenance Overhead**: Responsibility for hardware maintenance and updates
+      - **Limited Scalability**: Physical constraints on expansion
+      - **Resource Underutilization**: Hardware may be idle during off-peak times
+
+      ## Cloud-Native Lab
+
+      Cloud-native robotics labs leverage remote infrastructure for development and deployment:
+
+      ### Advantages
+      - **Cost Efficiency**: Pay-as-you-use model without large upfront investment
+      - **Scalability**: Instant access to additional resources as needed
+      - **Maintenance-Free**: Cloud provider handles infrastructure maintenance
+      - **Global Access**: Access to resources from anywhere with internet
+      - **Advanced Services**: Access to specialized AI and simulation services
+
+      ### Disadvantages
+      - **Data Privacy**: Potential concerns with sensitive data in cloud
+      - **Network Dependency**: Performance dependent on internet connectivity
+      - **Recurring Costs**: Ongoing operational expenses
+      - **Limited Customization**: Constraints imposed by cloud platform
+
+      ## Cost Calculation
+
+      When deciding between cloud and on-premise solutions, consider:
+
+      ### On-Premise Costs
+      - Hardware acquisition (servers, GPUs, networking)
+      - Facility costs (space, power, cooling)
+      - Staff salaries (IT, maintenance)
+      - Software licenses
+      - Maintenance and replacement
+
+      ### Cloud Costs
+      - Compute time (GPU/TPU hours)
+      - Storage costs
+      - Data transfer fees
+      - Software licensing (if applicable)
+      - Network bandwidth
+
+      ## Student Workflow
+
+      For educational environments, both approaches have distinct workflows:
+
+      ### On-Premise Student Workflow
+      1. Reserve lab time slot
+      2. Access physical or local virtual machines
+      3. Develop and test on local hardware
+      4. Submit projects for evaluation
+
+      ### Cloud Student Workflow
+      1. Access cloud development environment
+      2. Spin up required resources on-demand
+      3. Develop and test in cloud environment
+      4. Scale resources as needed for experiments
+
+      ### Comparison Table
+
+      | Aspect | On-Premise | Cloud-Native |
+      |--------|------------|--------------|
+      | Initial Cost | High | Low |
+      | Scalability | Limited | High |
+      | Security | High Control | Provider Dependent |
+      | Latency | Low | Variable |
+      | Maintenance | High | Low |
+      | Accessibility | Location Dependent | Global |
+
+      ### Images
+
+      ![On-Premise Robotics Lab](static/img/cloud_vs_local/on_premise_lab.png)
+
+      ![Cloud-Native Robotics Environment](static/img/cloud_vs_local/cloud_native_env.png)
+
+      ### Multilingual Section
+
+      <div id="multilingual-section">
+
+      <div data-language="en">
+
+      ## Multilingual Section — English
+
+      This is the English translation and original content for the Cloud vs On-Premise chapter.
+
+      </div>
+
+      <div data-language="ur">
+
+      ## Multilingual Section — اردو
+
+      یہ Cloud vs On-Premise chapter کا اردو ترجمہ ہے۔
+
+      </div>
+
+      <div data-language="ru">
+
+      ## Multilingual Section — Roman Urdu
+
+      Ye Cloud vs On-Premise chapter ka Roman Urdu tarjuma hai.
+
+      </div>
+
+      <div data-language="ar">
+
+      ## Multilingual Section — العربية
+
+      هذا هو ترجمة فصل Cloud vs On-Premise إلى العربية.
+
+      </div>
+
+      <div data-language="de">
+
+      ## Multilingual Section — Deutsch
+
+      Dies ist die deutsche Übersetzung des Cloud vs On-Premise Kapitels.
+
+      </div>
+
+      </div>
+
+    </>
+  )
+}

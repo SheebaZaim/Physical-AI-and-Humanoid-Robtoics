@@ -1,0 +1,202 @@
+---
+title: 'Reusable Intelligence via Claude Subagents'
+sidebar_label: 'Reusable Intelligence'
+slug: '/bonus_reusable_intelligence'
+---
+
+import React from 'react'
+
+export const frontmatter = {
+  title: 'Reusable Intelligence via Claude Subagents',
+  sidebar_label: 'Reusable Intelligence',
+  slug: '/bonus_reusable_intelligence'
+}
+
+// LanguageSelector component: minimal, accessible, and client-side only.
+// Place this at the top of each chapter .mdx (or import it from a shared component file).
+
+export function LanguageSelector({ defaultLang = 'en' }) {
+  const [lang, setLang] = React.useState(defaultLang)
+
+  React.useEffect(() => {
+    // keep selection in localStorage so user choice persists across pages
+    try { localStorage.setItem('book_lang', lang) } catch (e) {}
+  }, [lang])
+
+  return (
+    <div className="language-selector" aria-label="Choose language" style={{ marginBottom: '1rem' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <button onClick={() => setLang('en')} aria-pressed={lang === 'en'}>English</button>
+        <button onClick={() => setLang('ur')} aria-pressed={lang === 'ur'}>اردو</button>
+        <button onClick={() => setLang('ru')} aria-pressed={lang === 'ru'}>Roman Urdu</button>
+        <button onClick={() => setLang('ar')} aria-pressed={lang === 'ar'}>العربية</button>
+        <button onClick={() => setLang('de')} aria-pressed={lang === 'de'}>Deutsch</button>
+      </div>
+
+      <style>{`
+        .language-selector button { padding: 0.45rem 0.7rem; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08); background: transparent; cursor: pointer; }
+        .language-selector button[aria-pressed="true"] { box-shadow: 0 0 0 3px rgba(0,0,0,0.04) inset; font-weight: 600; }
+      `}</style>
+
+      {/* Hidden inputs to allow CSS-only targeting if desired */}
+      <input type="hidden" id="selected-lang" value={lang} />
+
+      {/* Render translations container statefully */}
+      <div>
+        {/* The translation blocks below are always present in the .mdx (for RAG / offline retrieval),
+            but they include a data-language attribute and are hidden unless selected. */}
+        <div data-language="en" style={{ display: lang === 'en' ? 'block' : 'none' }}>
+          {/* English content will appear here (can duplicate main content or provide summary). */}
+        </div>
+        <div data-language="ur" style={{ display: lang === 'ur' ? 'block' : 'none' }}>
+          {/* Urdu translation block */}
+        </div>
+        <div data-language="ru" style={{ display: lang === 'ru' ? 'block' : 'none' }}>
+          {/* Roman Urdu translation block */}
+        </div>
+        <div data-language="ar" style={{ display: lang === 'ar' ? 'block' : 'none' }}>
+          {/* Arabic translation block */}
+        </div>
+        <div data-language="de" style={{ display: lang === 'de' ? 'block' : 'none' }}>
+          {/* German translation block */}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function Chapter() {
+  return (
+    <>
+      <h1>{frontmatter.title}</h1>
+
+      <LanguageSelector defaultLang={typeof window !== 'undefined' ? (localStorage.getItem('book_lang') || 'en') : 'en'} />
+
+      ## What Are Subagents?
+
+      Subagents are specialized AI components that handle specific tasks within a larger system:
+
+      - **Task Specialization**: Each subagent focuses on a specific function
+      - **Reusability**: Subagents can be used across multiple applications
+      - **Scalability**: Independent scaling of different capabilities
+      - **Maintainability**: Isolated updates and improvements
+
+      ### Subagent Architecture
+
+      Subagents operate as independent services that can be orchestrated together:
+
+      ```
+      Main Agent → Task Routing → Subagent Selection → Task Execution → Result Aggregation
+      ```
+
+      ## Creating Reusable Intelligence
+
+      Reusable intelligence enables consistent, reliable AI capabilities across applications:
+
+      - **Standardized Interfaces**: Common API patterns for all subagents
+      - **Shared Knowledge Base**: Common data and context for all subagents
+      - **Consistent Behavior**: Predictable responses across different contexts
+      - **Version Control**: Track and manage subagent improvements over time
+
+      ### Implementation Patterns
+
+      1. **Factory Pattern**: Create subagents with common initialization
+      2. **Registry Pattern**: Maintain catalog of available subagents
+      3. **Adapter Pattern**: Standardize different AI service interfaces
+      4. **Chain Pattern**: Combine multiple subagents for complex tasks
+
+      ## Agent Skills
+
+      Agent skills are modular capabilities that can be dynamically loaded:
+
+      - **Modularity**: Skills can be added/removed without system restart
+      - **Discoverability**: Skills can be discovered and catalogued automatically
+      - **Configurability**: Skills can be configured for different contexts
+      - **Interoperability**: Skills can work together seamlessly
+
+      ### Skill Implementation
+
+      ```typescript
+      interface AgentSkill {
+        id: string;
+        name: string;
+        description: string;
+        execute(context: any): Promise<any>;
+        canHandle(task: string): boolean;
+      }
+      ```
+
+      ## Integrating Subagents into Book
+
+      Subagents enhance the book experience with dynamic capabilities:
+
+      - **Auto-summary Generator**: Create chapter summaries automatically
+      - **Glossary/Definition Finder**: Locate definitions for selected text
+      - **Code-Example Generator**: Generate code examples based on user needs
+      - **Quiz Generator**: Create chapter-specific quizzes
+      - **Translation Helper**: Convert content between languages
+
+      ### Integration Architecture
+
+      Subagents integrate with the Docusaurus frontend through:
+
+      1. **API Gateway**: Route requests to appropriate subagents
+      2. **Context Manager**: Maintain conversation and document context
+      3. **Result Formatter**: Format subagent output for display
+      4. **Error Handler**: Manage subagent failures gracefully
+
+      ### Images
+
+      ![Subagent Architecture](static/img/bonus_reusable_intelligence/subagent_architecture.png)
+
+      ![Agent Skills Integration](static/img/bonus_reusable_intelligence/agent_skills_integration.png)
+
+      ### Multilingual Section
+
+      <div id="multilingual-section">
+
+      <div data-language="en">
+
+      ## Multilingual Section — English
+
+      This is the English translation and original content for the Reusable Intelligence chapter.
+
+      </div>
+
+      <div data-language="ur">
+
+      ## Multilingual Section — اردو
+
+      یہ Reusable Intelligence کا باب کا اردو ترجمہ ہے۔
+
+      </div>
+
+      <div data-language="ru">
+
+      ## Multilingual Section — Roman Urdu
+
+      Ye Reusable Intelligence ka Roman Urdu tarjuma hai.
+
+      </div>
+
+      <div data-language="ar">
+
+      ## Multilingual Section — العربية
+
+      هذا هو ترجمة فصل Reusable Intelligence إلى العربية.
+
+      </div>
+
+      <div data-language="de">
+
+      ## Multilingual Section — Deutsch
+
+      Dies ist die deutsche Übersetzung des Reusable Intelligence Kapitels.
+
+      </div>
+
+      </div>
+
+    </>
+  )
+}

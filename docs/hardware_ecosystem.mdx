@@ -1,0 +1,201 @@
+---
+title: 'Robot Hardware: Jetson, RealSense, IMU & Unitree'
+sidebar_label: 'Robot Hardware'
+slug: '/hardware_ecosystem'
+---
+
+import React from 'react'
+
+export const frontmatter = {
+  title: 'Robot Hardware: Jetson, RealSense, IMU & Unitree',
+  sidebar_label: 'Robot Hardware',
+  slug: '/hardware_ecosystem'
+}
+
+// LanguageSelector component: minimal, accessible, and client-side only.
+// Place this at the top of each chapter .mdx (or import it from a shared component file).
+
+export function LanguageSelector({ defaultLang = 'en' }) {
+  const [lang, setLang] = React.useState(defaultLang)
+
+  React.useEffect(() => {
+    // keep selection in localStorage so user choice persists across pages
+    try { localStorage.setItem('book_lang', lang) } catch (e) {}
+  }, [lang])
+
+  return (
+    <div className="language-selector" aria-label="Choose language" style={{ marginBottom: '1rem' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <button onClick={() => setLang('en')} aria-pressed={lang === 'en'}>English</button>
+        <button onClick={() => setLang('ur')} aria-pressed={lang === 'ur'}>اردو</button>
+        <button onClick={() => setLang('ru')} aria-pressed={lang === 'ru'}>Roman Urdu</button>
+        <button onClick={() => setLang('ar')} aria-pressed={lang === 'ar'}>العربية</button>
+        <button onClick={() => setLang('de')} aria-pressed={lang === 'de'}>Deutsch</button>
+      </div>
+
+      <style>{`
+        .language-selector button { padding: 0.45rem 0.7rem; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08); background: transparent; cursor: pointer; }
+        .language-selector button[aria-pressed="true"] { box-shadow: 0 0 0 3px rgba(0,0,0,0.04) inset; font-weight: 600; }
+      `}</style>
+
+      {/* Hidden inputs to allow CSS-only targeting if desired */}
+      <input type="hidden" id="selected-lang" value={lang} />
+
+      {/* Render translations container statefully */}
+      <div>
+        {/* The translation blocks below are always present in the .mdx (for RAG / offline retrieval),
+            but they include a data-language attribute and are hidden unless selected. */}
+        <div data-language="en" style={{ display: lang === 'en' ? 'block' : 'none' }}>
+          {/* English content will appear here (can duplicate main content or provide summary). */}
+        </div>
+        <div data-language="ur" style={{ display: lang === 'ur' ? 'block' : 'none' }}>
+          {/* Urdu translation block */}
+        </div>
+        <div data-language="ru" style={{ display: lang === 'ru' ? 'block' : 'none' }}>
+          {/* Roman Urdu translation block */}
+        </div>
+        <div data-language="ar" style={{ display: lang === 'ar' ? 'block' : 'none' }}>
+          {/* Arabic translation block */}
+        </div>
+        <div data-language="de" style={{ display: lang === 'de' ? 'block' : 'none' }}>
+          {/* German translation block */}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function Chapter() {
+  return (
+    <>
+      <h1>{frontmatter.title}</h1>
+
+      <LanguageSelector defaultLang={typeof window !== 'undefined' ? (localStorage.getItem('book_lang') || 'en') : 'en'} />
+
+      ## Jetson Orin Nano Student Kit
+
+      The NVIDIA Jetson Orin Nano is a powerful edge AI computing platform designed for robotics and AI applications. Key features include:
+
+      - **GPU**: NVIDIA Ampere architecture with 1024 CUDA cores
+      - **CPU**: 6-core ARM v8.2 64-bit CPU
+      - **Memory**: 4GB or 8GB LPDDR5
+      - **AI Performance**: Up to 40 TOPS for INT8 inference
+      - **Power**: 7-15W consumption depending on configuration
+
+      ### Development Setup
+
+      1. Install JetPack SDK (based on Ubuntu 20.04)
+      2. Configure ROS 2 Humble Hawksbill
+      3. Install Isaac ROS packages
+      4. Set up development environment with CUDA support
+
+      ## RealSense D435i/D455
+
+      Intel RealSense cameras provide high-quality depth sensing for robotics applications:
+
+      - **D435i**: RGB-D camera with built-in IMU sensors
+      - **D455**: Enhanced version with improved depth accuracy
+      - **Depth Technology**: Stereo vision with active IR illumination
+      - **Resolution**: Up to 1280×720 depth at 90 FPS
+      - **ROS Integration**: Native ROS 2 drivers available
+
+      ### Key Specifications
+
+      - **Field of View**: 85° × 58° × 94° (H×V×D)
+      - **Depth Range**: 0.25m to 9.1m
+      - **Connectivity**: USB 3.0 Type-C
+      - **Operating Temperature**: 0°C to 40°C
+
+      ## IMUs & Microphones
+
+      Inertial Measurement Units (IMUs) provide crucial sensor data for robot navigation:
+
+      - **BNO055**: 9-axis absolute orientation sensor
+      - **Accelerometer**: Measures linear acceleration
+      - **Gyroscope**: Measures angular velocity
+      - **Magnetometer**: Provides magnetic field measurements
+      - **Microphones**: Audio input for voice interaction
+
+      ## Unitree Go2/G1
+
+      Unitree quadruped robots offer advanced locomotion capabilities:
+
+      - **Go2**: Lightweight quadruped with 4 DoF per leg
+      - **G1**: Larger model with enhanced payload capacity
+      - **Speed**: Up to 1.6 m/s forward speed
+      - **Sensors**: 3D LiDAR, RGB camera, IMU
+      - **SDK**: Comprehensive development kit for custom behaviors
+
+      ### Control Architecture
+
+      - **High-level Controller**: Trajectory planning and task management
+      - **Low-level Controller**: Motor control and balance maintenance
+      - **Perception Stack**: Environment awareness and mapping
+      - **Communication**: WiFi, Ethernet, and CAN bus interfaces
+
+      ## Proxy Robots vs Humanoids
+
+      Proxy robots serve as intermediaries between human operators and complex tasks:
+
+      - **Teleoperation**: Direct human control with haptic feedback
+      - **Semi-autonomous**: Human-in-the-loop decision making
+      - **Safety**: Remote operation in hazardous environments
+      - **Cost-effectiveness**: Reduced hardware requirements
+
+      ### Images
+
+      ![Jetson Orin Nano Kit](static/img/hardware_ecosystem/jetson_orin_nano.png)
+
+      ![RealSense D435i Camera](static/img/hardware_ecosystem/realsense_d435i.png)
+
+      ![Unitree Go2 Robot](static/img/hardware_ecosystem/unitree_go2.png)
+
+      ### Multilingual Section
+
+      <div id="multilingual-section">
+
+      <div data-language="en">
+
+      ## Multilingual Section — English
+
+      This is the English translation and original content for the Robot Hardware chapter.
+
+      </div>
+
+      <div data-language="ur">
+
+      ## Multilingual Section — اردو
+
+      یہ Robot Hardware کا باب کا اردو ترجمہ ہے۔
+
+      </div>
+
+      <div data-language="ru">
+
+      ## Multilingual Section — Roman Urdu
+
+      Ye Robot Hardware ka Roman Urdu tarjuma hai.
+
+      </div>
+
+      <div data-language="ar">
+
+      ## Multilingual Section — العربية
+
+      هذا هو ترجمة فصل Robot Hardware إلى العربية.
+
+      </div>
+
+      <div data-language="de">
+
+      ## Multilingual Section — Deutsch
+
+      Dies ist die deutsche Übersetzung des Robot Hardware Kapitels.
+
+      </div>
+
+      </div>
+
+    </>
+  )
+}

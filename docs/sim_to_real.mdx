@@ -1,0 +1,201 @@
+---
+title: 'Sim-to-Real: Training Models & Deploying to Jetson'
+sidebar_label: 'Sim-to-Real Transfer'
+slug: '/sim_to_real'
+---
+
+import React from 'react'
+
+export const frontmatter = {
+  title: 'Sim-to-Real: Training Models & Deploying to Jetson',
+  sidebar_label: 'Sim-to-Real Transfer',
+  slug: '/sim_to_real'
+}
+
+// LanguageSelector component: minimal, accessible, and client-side only.
+// Place this at the top of each chapter .mdx (or import it from a shared component file).
+
+export function LanguageSelector({ defaultLang = 'en' }) {
+  const [lang, setLang] = React.useState(defaultLang)
+
+  React.useEffect(() => {
+    // keep selection in localStorage so user choice persists across pages
+    try { localStorage.setItem('book_lang', lang) } catch (e) {}
+  }, [lang])
+
+  return (
+    <div className="language-selector" aria-label="Choose language" style={{ marginBottom: '1rem' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <button onClick={() => setLang('en')} aria-pressed={lang === 'en'}>English</button>
+        <button onClick={() => setLang('ur')} aria-pressed={lang === 'ur'}>اردو</button>
+        <button onClick={() => setLang('ru')} aria-pressed={lang === 'ru'}>Roman Urdu</button>
+        <button onClick={() => setLang('ar')} aria-pressed={lang === 'ar'}>العربية</button>
+        <button onClick={() => setLang('de')} aria-pressed={lang === 'de'}>Deutsch</button>
+      </div>
+
+      <style>{`
+        .language-selector button { padding: 0.45rem 0.7rem; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08); background: transparent; cursor: pointer; }
+        .language-selector button[aria-pressed="true"] { box-shadow: 0 0 0 3px rgba(0,0,0,0.04) inset; font-weight: 600; }
+      `}</style>
+
+      {/* Hidden inputs to allow CSS-only targeting if desired */}
+      <input type="hidden" id="selected-lang" value={lang} />
+
+      {/* Render translations container statefully */}
+      <div>
+        {/* The translation blocks below are always present in the .mdx (for RAG / offline retrieval),
+            but they include a data-language attribute and are hidden unless selected. */}
+        <div data-language="en" style={{ display: lang === 'en' ? 'block' : 'none' }}>
+          {/* English content will appear here (can duplicate main content or provide summary). */}
+        </div>
+        <div data-language="ur" style={{ display: lang === 'ur' ? 'block' : 'none' }}>
+          {/* Urdu translation block */}
+        </div>
+        <div data-language="ru" style={{ display: lang === 'ru' ? 'block' : 'none' }}>
+          {/* Roman Urdu translation block */}
+        </div>
+        <div data-language="ar" style={{ display: lang === 'ar' ? 'block' : 'none' }}>
+          {/* Arabic translation block */}
+        </div>
+        <div data-language="de" style={{ display: lang === 'de' ? 'block' : 'none' }}>
+          {/* German translation block */}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function Chapter() {
+  return (
+    <>
+      <h1>{frontmatter.title}</h1>
+
+      <LanguageSelector defaultLang={typeof window !== 'undefined' ? (localStorage.getItem('book_lang') || 'en') : 'en'} />
+
+      ## Training in Cloud
+
+      Cloud-based training provides access to powerful GPUs and scalable infrastructure for developing AI models:
+
+      - **Compute Resources**: Access to high-end GPUs (A100, H100) without local hardware investment
+      - **Scalability**: Ability to scale training across multiple nodes
+      - **Managed Services**: Pre-configured environments with optimized frameworks
+      - **Data Storage**: High-bandwidth storage for large datasets
+
+      ### Cloud Platforms for Robotics AI
+
+      - **AWS SageMaker**: Managed machine learning service with robotics frameworks
+      - **Google Cloud AI Platform**: Vertex AI with specialized ML tools
+      - **Azure Machine Learning**: Comprehensive AI development platform
+      - **NVIDIA NGC**: Optimized containers for AI and simulation workloads
+
+      ## Exporting Weights
+
+      Converting trained models for deployment on edge devices requires optimization:
+
+      - **TensorRT**: NVIDIA's inference optimizer for Jetson platforms
+      - **ONNX**: Open Neural Network Exchange format for cross-platform compatibility
+      - **TensorFlow Lite**: Optimized for mobile and edge devices
+      - **PyTorch Mobile**: Direct deployment of PyTorch models
+
+      ### Optimization Techniques
+
+      1. **Quantization**: Reducing precision from FP32 to INT8 for efficiency
+      2. **Pruning**: Removing redundant connections in neural networks
+      3. **Knowledge Distillation**: Creating smaller, faster student models
+      4. **Model Compression**: Reducing model size while maintaining accuracy
+
+      ## Flashing Model to Jetson
+
+      Deploying models to Jetson devices involves several steps:
+
+      1. **Environment Setup**: Install JetPack and CUDA drivers
+      2. **Model Conversion**: Convert to Jetson-compatible format using TensorRT
+      3. **Integration**: Integrate with ROS 2 and Isaac ROS packages
+      4. **Testing**: Validate performance and accuracy on target hardware
+
+      ### Deployment Pipeline
+
+      ```
+      Trained Model → TensorRT Optimization → Jetson Deployment → Performance Validation
+      ```
+
+      ## Testing on Real Robots
+
+      Validating sim-to-real transfer requires systematic testing:
+
+      - **Performance Metrics**: Latency, accuracy, and resource utilization
+      - **Environmental Robustness**: Testing across different lighting and conditions
+      - **Safety Validation**: Ensuring safe operation in real environments
+      - **Edge Case Handling**: Verifying behavior with unexpected inputs
+
+      ## The Latency Trap
+
+      One of the biggest challenges in sim-to-real transfer is managing latency:
+
+      - **Inference Latency**: Time to process sensor data through AI models
+      - **Communication Latency**: Time for sensor data to reach processing unit
+      - **Actuation Delay**: Time from command to physical action execution
+      - **Total System Latency**: Cumulative delay affecting real-time performance
+
+      ### Mitigation Strategies
+
+      - **Edge Computing**: Processing data locally on robot hardware
+      - **Model Optimization**: Reducing computational requirements
+      - **Sensor Fusion**: Combining multiple sensor streams efficiently
+      - **Predictive Control**: Anticipating actions to compensate for delays
+
+      ### Images
+
+      ![Sim-to-Real Pipeline](static/img/sim_to_real/sim_to_real_pipeline.png)
+
+      ![Jetson Model Deployment](static/img/sim_to_real/jetson_deployment.png)
+
+      ### Multilingual Section
+
+      <div id="multilingual-section">
+
+      <div data-language="en">
+
+      ## Multilingual Section — English
+
+      This is the English translation and original content for the Sim-to-Real chapter.
+
+      </div>
+
+      <div data-language="ur">
+
+      ## Multilingual Section — اردو
+
+      یہ Sim-to-Real chapter کا اردو ترجمہ ہے۔
+
+      </div>
+
+      <div data-language="ru">
+
+      ## Multilingual Section — Roman Urdu
+
+      Ye Sim-to-Real chapter ka Roman Urdu tarjuma hai.
+
+      </div>
+
+      <div data-language="ar">
+
+      ## Multilingual Section — العربية
+
+      هذا هو ترجمة فصل Sim-to-Real إلى العربية.
+
+      </div>
+
+      <div data-language="de">
+
+      ## Multilingual Section — Deutsch
+
+      Dies ist die deutsche Übersetzung des Sim-to-Real Kapitels.
+
+      </div>
+
+      </div>
+
+    </>
+  )
+}
