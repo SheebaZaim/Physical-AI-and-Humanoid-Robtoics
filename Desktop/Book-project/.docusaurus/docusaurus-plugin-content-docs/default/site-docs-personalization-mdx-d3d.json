@@ -1,0 +1,28 @@
+{
+  "id": "personalization",
+  "title": "User Personalization & Translation Features",
+  "description": "// LanguageSelector component: minimal, accessible, and client-side only.",
+  "source": "@site/docs/personalization.mdx",
+  "sourceDirName": ".",
+  "slug": "/personalization",
+  "permalink": "/docs/personalization",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/personalization.mdx",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "User Personalization & Translation Features",
+    "sidebar_label": "Personalization",
+    "slug": "/personalization"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Isaac AI-Robot Brain",
+    "permalink": "/docs/isaac_ai_robot_brain"
+  },
+  "next": {
+    "title": "RAG Chatbot Integration",
+    "permalink": "/docs/rag_chatbot"
+  }
+}

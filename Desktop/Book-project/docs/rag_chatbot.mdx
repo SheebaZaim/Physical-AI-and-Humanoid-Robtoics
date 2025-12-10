@@ -1,0 +1,186 @@
+---
+title: 'Integrating RAG Chatbot in the Book'
+sidebar_label: 'RAG Chatbot Integration'
+slug: '/rag_chatbot'
+---
+
+import React from 'react'
+
+export const frontmatter = {
+  title: 'Integrating RAG Chatbot in the Book',
+  sidebar_label: 'RAG Chatbot Integration',
+  slug: '/rag_chatbot'
+}
+
+// LanguageSelector component: minimal, accessible, and client-side only.
+// Place this at the top of each chapter .mdx (or import it from a shared component file).
+
+export function LanguageSelector({ defaultLang = 'en' }) {
+  const [lang, setLang] = React.useState(defaultLang)
+
+  React.useEffect(() => {
+    // keep selection in localStorage so user choice persists across pages
+    try { localStorage.setItem('book_lang', lang) } catch (e) {}
+  }, [lang])
+
+  return (
+    <div className="language-selector" aria-label="Choose language" style={{ marginBottom: '1rem' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <button onClick={() => setLang('en')} aria-pressed={lang === 'en'}>English</button>
+        <button onClick={() => setLang('ur')} aria-pressed={lang === 'ur'}>اردو</button>
+        <button onClick={() => setLang('ru')} aria-pressed={lang === 'ru'}>Roman Urdu</button>
+        <button onClick={() => setLang('ar')} aria-pressed={lang === 'ar'}>العربية</button>
+        <button onClick={() => setLang('de')} aria-pressed={lang === 'de'}>Deutsch</button>
+      </div>
+
+      <style>{`
+        .language-selector button { padding: 0.45rem 0.7rem; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08); background: transparent; cursor: pointer; }
+        .language-selector button[aria-pressed="true"] { box-shadow: 0 0 0 3px rgba(0,0,0,0.04) inset; font-weight: 600; }
+      `}</style>
+
+      {/* Hidden inputs to allow CSS-only targeting if desired */}
+      <input type="hidden" id="selected-lang" value={lang} />
+
+      {/* Render translations container statefully */}
+      <div>
+        {/* The translation blocks below are always present in the .mdx (for RAG / offline retrieval),
+            but they include a data-language attribute and are hidden unless selected. */}
+        <div data-language="en" style={{ display: lang === 'en' ? 'block' : 'none' }}>
+          {/* English content will appear here (can duplicate main content or provide summary). */}
+        </div>
+        <div data-language="ur" style={{ display: lang === 'ur' ? 'block' : 'none' }}>
+          {/* Urdu translation block */}
+        </div>
+        <div data-language="ru" style={{ display: lang === 'ru' ? 'block' : 'none' }}>
+          {/* Roman Urdu translation block */}
+        </div>
+        <div data-language="ar" style={{ display: lang === 'ar' ? 'block' : 'none' }}>
+          {/* Arabic translation block */}
+        </div>
+        <div data-language="de" style={{ display: lang === 'de' ? 'block' : 'none' }}>
+          {/* German translation block */}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function Chapter() {
+  return (
+    <>
+      <h1>{frontmatter.title}</h1>
+
+      <LanguageSelector defaultLang={typeof window !== 'undefined' ? (localStorage.getItem('book_lang') || 'en') : 'en'} />
+
+      ## RAG Chatbot Integration Overview
+
+      The Retrieval-Augmented Generation (RAG) chatbot is seamlessly integrated into the book to provide interactive learning experiences. This integration allows readers to ask questions about the content and receive contextually relevant answers.
+
+      ### Key Integration Points
+
+      - **Contextual Understanding**: The chatbot understands the current chapter and section
+      - **Content Retrieval**: Searches the entire book for relevant information
+      - **Interactive Learning**: Enables real-time Q&A for better comprehension
+      - **Multilingual Support**: Provides responses in multiple languages
+
+      ## FastAPI Backend Architecture
+
+      The RAG system is built on a robust FastAPI backend that handles:
+
+      - **Query Processing**: Natural language understanding and intent recognition
+      - **Vector Search**: Semantic search across book content using embeddings
+      - **Response Generation**: Context-aware answers using LLMs
+      - **Session Management**: Maintains conversation context
+
+      ## Qdrant Vector Database
+
+      Qdrant serves as the vector database for efficient similarity search:
+
+      - **High Performance**: Optimized for fast vector similarity search
+      - **Scalability**: Handles large knowledge bases efficiently
+      - **Filtering**: Supports metadata filtering for precise results
+      - **Cloud Ready**: Easy deployment on cloud infrastructure
+
+      ## Integration with Docusaurus
+
+      The chatbot is integrated directly into the Docusaurus documentation:
+
+      - **Widget Interface**: Embedded chat interface within the documentation
+      - **Context Awareness**: Knows which page/section the user is viewing
+      - **Code Understanding**: Can explain code examples in the documentation
+      - **Cross-Reference**: Links to related content within the book
+
+      ## Personalization Features
+
+      The RAG chatbot adapts to user preferences and background:
+
+      - **User Profile Integration**: Uses Better-Auth user data for personalization
+      - **Skill Level Adaptation**: Adjusts complexity based on user expertise
+      - **Learning Path Guidance**: Suggests next steps based on user goals
+      - **Progress Tracking**: Remembers user questions and learning progress
+
+      ## Implementation Architecture
+
+      The integration follows a microservice architecture:
+
+      ```
+      Docusaurus Frontend ↔ API Gateway ↔ RAG Service ↔ Vector Database
+                                          ↓
+                                    User Profile Service
+      ```
+
+      ### Images
+
+      ![RAG Chatbot Interface](static/img/rag_chatbot_interface/rag_interface.png)
+
+      ![Integration Architecture](static/img/rag_chatbot_interface/integration_architecture.png)
+
+      ### Multilingual Section
+
+      <div id="multilingual-section">
+
+      <div data-language="en">
+
+      ## Multilingual Section — English
+
+      This is the English translation and original content for the RAG Chatbot Integration chapter.
+
+      </div>
+
+      <div data-language="ur">
+
+      ## Multilingual Section — اردو
+
+      یہ RAG Chatbot Integration کا باب کا اردو ترجمہ ہے۔
+
+      </div>
+
+      <div data-language="ru">
+
+      ## Multilingual Section — Roman Urdu
+
+      Ye RAG Chatbot Integration ka Roman Urdu tarjuma hai.
+
+      </div>
+
+      <div data-language="ar">
+
+      ## Multilingual Section — العربية
+
+      هذا هو ترجمة فصل RAG Chatbot Integration إلى العربية.
+
+      </div>
+
+      <div data-language="de">
+
+      ## Multilingual Section — Deutsch
+
+      Dies ist die deutsche Übersetzung des RAG Chatbot Integration Kapitels.
+
+      </div>
+
+      </div>
+
+    </>
+  )
+}

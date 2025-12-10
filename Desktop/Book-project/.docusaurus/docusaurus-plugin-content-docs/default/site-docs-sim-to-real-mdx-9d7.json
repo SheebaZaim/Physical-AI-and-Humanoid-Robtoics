@@ -1,0 +1,28 @@
+{
+  "id": "sim_to_real",
+  "title": "Sim-to-Real: Training Models & Deploying to Jetson",
+  "description": "// LanguageSelector component: minimal, accessible, and client-side only.",
+  "source": "@site/docs/sim_to_real.mdx",
+  "sourceDirName": ".",
+  "slug": "/sim_to_real",
+  "permalink": "/docs/sim_to_real",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/sim_to_real.mdx",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Sim-to-Real: Training Models & Deploying to Jetson",
+    "sidebar_label": "Sim-to-Real Transfer",
+    "slug": "/sim_to_real"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "RAG Chatbot Integration",
+    "permalink": "/docs/rag_chatbot"
+  },
+  "next": {
+    "title": "Vision-Language-Action Systems",
+    "permalink": "/docs/vla_systems"
+  }
+}

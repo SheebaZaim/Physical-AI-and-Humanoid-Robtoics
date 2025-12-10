@@ -1,0 +1,28 @@
+{
+  "id": "rag_chatbot",
+  "title": "Integrating RAG Chatbot in the Book",
+  "description": "// LanguageSelector component: minimal, accessible, and client-side only.",
+  "source": "@site/docs/rag_chatbot.mdx",
+  "sourceDirName": ".",
+  "slug": "/rag_chatbot",
+  "permalink": "/docs/rag_chatbot",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/rag_chatbot.mdx",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Integrating RAG Chatbot in the Book",
+    "sidebar_label": "RAG Chatbot Integration",
+    "slug": "/rag_chatbot"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Personalization",
+    "permalink": "/docs/personalization"
+  },
+  "next": {
+    "title": "Sim-to-Real Transfer",
+    "permalink": "/docs/sim_to_real"
+  }
+}

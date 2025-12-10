@@ -1,0 +1,28 @@
+{
+  "id": "intro_physical_ai",
+  "title": "Introduction to Physical AI & Embodied Robotics",
+  "description": "Chapter Goals",
+  "source": "@site/docs/intro_physical_ai.mdx",
+  "sourceDirName": ".",
+  "slug": "/intro_physical_ai",
+  "permalink": "/docs/intro_physical_ai",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/intro_physical_ai.mdx",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1,
+    "title": "Introduction to Physical AI & Embodied Robotics"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Tutorial Intro",
+    "permalink": "/docs/intro"
+  },
+  "next": {
+    "title": "Foundations of Humanoid Robotics",
+    "permalink": "/docs/robotics_foundations"
+  }
+}

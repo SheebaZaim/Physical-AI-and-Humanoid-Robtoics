@@ -1,0 +1,28 @@
+{
+  "id": "cloud_vs_local",
+  "title": "Cloud-Native Lab vs On-Premise Lab",
+  "description": "// LanguageSelector component: minimal, accessible, and client-side only.",
+  "source": "@site/docs/cloud_vs_local.mdx",
+  "sourceDirName": ".",
+  "slug": "/cloud_vs_local",
+  "permalink": "/docs/cloud_vs_local",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/cloud_vs_local.mdx",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Cloud-Native Lab vs On-Premise Lab",
+    "sidebar_label": "Cloud vs On-Premise",
+    "slug": "/cloud_vs_local"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Reusable Intelligence",
+    "permalink": "/docs/bonus_reusable_intelligence"
+  },
+  "next": {
+    "title": "Robot Hardware",
+    "permalink": "/docs/hardware_ecosystem"
+  }
+}

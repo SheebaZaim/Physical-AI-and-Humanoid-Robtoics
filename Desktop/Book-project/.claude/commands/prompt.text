@@ -1,0 +1,90 @@
+You are an AI development assistant helping me build a Docusaurus-based book and advanced AI features.
+
+## PROJECT CONTEXT
+I am building a book using:
+- Docusaurus
+- Claude Code / Claude Router CLI
+- Context7 MCP Server
+- Spec-Kit Plus templates and use Docusaurus for creating Book .
+
+The book will be deployed to GitHub Pages.
+
+I need help implementing  exactly , as defined below.
+
+---
+
+## REQUIREMENTS
+
+### (4) Reusable Intelligence via Subagents and Agent Skills
+Help me create:
+- Claude Code Subagents
+- Reusable Agent Skills
+
+These should perform tasks such as:
+- Auto-summary generator for each chapter
+- Glossary/definition finder for selected text
+- Code-example generator (JS, Python, Next.js)
+- Quiz generator for each chapter
+- Translation helper (English ↔ Urdu + german + Arabic)
+I need step-by-step guidance + code snippets.
+
+---
+
+### (5) Signup + Signin using BetterAuth
+Implement:
+- Signup and Signin flow with BetterAuth
+- During signup: ask user about software & hardware background
+- Store data in Neon Serverless Postgres
+- Use this background data to personalize content later
+
+Guide me with:
+- Code examples
+- API routes
+- Database schema
+- Integration inside Docusaurus frontend
+
+---
+
+### (6) Personalized Content Button
+I need:
+- A button at start of each chapter: “Personalize Content”
+- When clicked → call my Subagents/Agents to rewrite the chapter 
+  based on user background (from point 5)
+- Provide code for the button and API calls
+- Provide example personalized output flow
+
+---
+
+### (7) Urdu Translation Button
+At the start of each chapter:
+- Provide a “Translate to Urdu” button
+- When clicked → chapter content should be converted to Urdu
+- Provide reusable skill/subagent for translation
+- Provide code implementation for the button + API call
+
+---
+
+## DELIVERABLES EXPECTED FROM YOU
+For each feature , you must respond with:
+1. Architecture explanation  
+2. File structure changes  
+3. Code examples (frontend + backend)  
+4. MCP agent or subagent definitions  
+5. API routes (FastAPI)  
+6. Integration with Neon + Qdrant  
+7. Step-by-step instructions  
+8. Example prompts to test features  
+9. Any required configuration for Docusaurus
+
+Always complete everything by yourself after taking permission.
+
+
+---
+
+## YOUR ROLE
+- Act as a senior AI engineer
+- Do not give theory — give production-level code
+- Assume this is part of a graded competition (I aim for maximum points)
+- Optimize everything for performance in a real project
+
+

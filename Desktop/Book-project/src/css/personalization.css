@@ -1,0 +1,102 @@
+.personalization-controls {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.personalization-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.personalization-options label {
+  font-weight: 500;
+  color: var(--ifm-color-emphasis-800);
+}
+
+.personalization-select {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  background-color: var(--ifm-background-surface-color);
+  font-size: 0.875rem;
+}
+
+.personalization-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.personalize-button, .reset-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--ifm-color-primary);
+  border-radius: var(--ifm-global-radius);
+  background-color: var(--ifm-color-primary);
+  color: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all var(--ifm-transition-fast) var(--ifm-transition-timing-default);
+}
+
+.personalize-button:hover:not(:disabled), .reset-button:hover:not(:disabled) {
+  background-color: var(--ifm-color-primary-dark);
+  border-color: var(--ifm-color-primary-dark);
+}
+
+.personalize-button.loading {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.personalize-button:disabled, .reset-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reset-button {
+  background-color: transparent;
+  color: var(--ifm-color-primary);
+}
+
+.reset-button:hover:not(:disabled) {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.personalization-prompt {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px dashed var(--ifm-color-emphasis-400);
+  border-radius: var(--ifm-global-radius);
+  background-color: var(--ifm-color-emphasis-100);
+  text-align: center;
+}
+
+.user-profile-summary {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ifm-color-emphasis-300);
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .personalization-options {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .personalization-buttons {
+    flex-direction: column;
+  }
+
+  .personalize-button, .reset-button {
+    width: 100%;
+  }
+}

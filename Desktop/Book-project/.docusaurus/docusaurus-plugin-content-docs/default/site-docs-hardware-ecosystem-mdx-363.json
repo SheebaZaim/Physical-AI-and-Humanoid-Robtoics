@@ -1,0 +1,28 @@
+{
+  "id": "hardware_ecosystem",
+  "title": "Robot Hardware: Jetson, RealSense, IMU & Unitree",
+  "description": "// LanguageSelector component: minimal, accessible, and client-side only.",
+  "source": "@site/docs/hardware_ecosystem.mdx",
+  "sourceDirName": ".",
+  "slug": "/hardware_ecosystem",
+  "permalink": "/docs/hardware_ecosystem",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/hardware_ecosystem.mdx",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Robot Hardware: Jetson, RealSense, IMU & Unitree",
+    "sidebar_label": "Robot Hardware",
+    "slug": "/hardware_ecosystem"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Cloud vs On-Premise",
+    "permalink": "/docs/cloud_vs_local"
+  },
+  "next": {
+    "title": "Isaac AI-Robot Brain",
+    "permalink": "/docs/isaac_ai_robot_brain"
+  }
+}

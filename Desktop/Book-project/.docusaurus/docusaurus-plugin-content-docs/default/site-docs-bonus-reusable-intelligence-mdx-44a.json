@@ -1,0 +1,28 @@
+{
+  "id": "bonus_reusable_intelligence",
+  "title": "Reusable Intelligence via Claude Subagents",
+  "description": "// LanguageSelector component: minimal, accessible, and client-side only.",
+  "source": "@site/docs/bonus_reusable_intelligence.mdx",
+  "sourceDirName": ".",
+  "slug": "/bonus_reusable_intelligence",
+  "permalink": "/docs/bonus_reusable_intelligence",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/bonus_reusable_intelligence.mdx",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Reusable Intelligence via Claude Subagents",
+    "sidebar_label": "Reusable Intelligence",
+    "slug": "/bonus_reusable_intelligence"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Appendices & Resources",
+    "permalink": "/docs/appendices_resources"
+  },
+  "next": {
+    "title": "Cloud vs On-Premise",
+    "permalink": "/docs/cloud_vs_local"
+  }
+}

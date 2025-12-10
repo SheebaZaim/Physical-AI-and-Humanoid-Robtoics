@@ -1,0 +1,64 @@
+{
+  "defaultLocale": "en",
+  "locales": [
+    "en",
+    "ur",
+    "ru",
+    "ar",
+    "de"
+  ],
+  "path": "i18n",
+  "currentLocale": "en",
+  "localeConfigs": {
+    "en": {
+      "label": "English",
+      "direction": "ltr",
+      "htmlLang": "en",
+      "calendar": "gregory",
+      "path": "en",
+      "translate": false,
+      "url": "https://your-book-site.com",
+      "baseUrl": "/"
+    },
+    "ur": {
+      "label": "اردو",
+      "direction": "rtl",
+      "htmlLang": "ur",
+      "calendar": "gregory",
+      "path": "ur",
+      "translate": false,
+      "url": "https://your-book-site.com",
+      "baseUrl": "/ur/"
+    },
+    "ru": {
+      "label": "Русский",
+      "direction": "ltr",
+      "htmlLang": "ru",
+      "calendar": "gregory",
+      "path": "ru",
+      "translate": false,
+      "url": "https://your-book-site.com",
+      "baseUrl": "/ru/"
+    },
+    "ar": {
+      "label": "العربية",
+      "direction": "rtl",
+      "htmlLang": "ar",
+      "calendar": "gregory",
+      "path": "ar",
+      "translate": false,
+      "url": "https://your-book-site.com",
+      "baseUrl": "/ar/"
+    },
+    "de": {
+      "label": "Deutsch",
+      "direction": "ltr",
+      "htmlLang": "de",
+      "calendar": "gregory",
+      "path": "de",
+      "translate": false,
+      "url": "https://your-book-site.com",
+      "baseUrl": "/de/"
+    }
+  }
+}

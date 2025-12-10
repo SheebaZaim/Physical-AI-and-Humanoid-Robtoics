@@ -1,0 +1,28 @@
+{
+  "id": "appendices_resources",
+  "title": "Appendices, Diagrams & Resources",
+  "description": "// LanguageSelector component: minimal, accessible, and client-side only.",
+  "source": "@site/docs/appendices_resources.mdx",
+  "sourceDirName": ".",
+  "slug": "/appendices_resources",
+  "permalink": "/docs/appendices_resources",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/appendices_resources.mdx",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Appendices, Diagrams & Resources",
+    "sidebar_label": "Appendices & Resources",
+    "slug": "/appendices_resources"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Module 2: The Digital Twin (Gazebo & Unity)",
+    "permalink": "/docs/digital_twin"
+  },
+  "next": {
+    "title": "Reusable Intelligence",
+    "permalink": "/docs/bonus_reusable_intelligence"
+  }
+}

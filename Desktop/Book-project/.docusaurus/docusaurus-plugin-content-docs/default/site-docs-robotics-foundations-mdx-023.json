@@ -1,0 +1,28 @@
+{
+  "id": "robotics_foundations",
+  "title": "Foundations of Humanoid Robotics",
+  "description": "Chapter Goals",
+  "source": "@site/docs/robotics_foundations.mdx",
+  "sourceDirName": ".",
+  "slug": "/robotics_foundations",
+  "permalink": "/docs/robotics_foundations",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/robotics_foundations.mdx",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2,
+    "title": "Foundations of Humanoid Robotics"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Introduction to Physical AI & Embodied Robotics",
+    "permalink": "/docs/intro_physical_ai"
+  },
+  "next": {
+    "title": "Tutorial - Basics",
+    "permalink": "/docs/category/tutorial---basics"
+  }
+}

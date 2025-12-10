@@ -1,0 +1,28 @@
+{
+  "id": "isaac_ai_robot_brain",
+  "title": "Module 3: The AI-Robot Brain (NVIDIA Isaac)",
+  "description": "// LanguageSelector component: minimal, accessible, and client-side only.",
+  "source": "@site/docs/isaac_ai_robot_brain.mdx",
+  "sourceDirName": ".",
+  "slug": "/isaac_ai_robot_brain",
+  "permalink": "/docs/isaac_ai_robot_brain",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/isaac_ai_robot_brain.mdx",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Module 3: The AI-Robot Brain (NVIDIA Isaac)",
+    "sidebar_label": "Isaac AI-Robot Brain",
+    "slug": "/isaac_ai_robot_brain"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Robot Hardware",
+    "permalink": "/docs/hardware_ecosystem"
+  },
+  "next": {
+    "title": "Personalization",
+    "permalink": "/docs/personalization"
+  }
+}

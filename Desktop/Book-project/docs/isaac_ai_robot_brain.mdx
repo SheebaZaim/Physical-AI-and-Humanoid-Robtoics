@@ -1,0 +1,185 @@
+---
+title: 'Module 3: The AI-Robot Brain (NVIDIA Isaac)'
+sidebar_label: 'Isaac AI-Robot Brain'
+slug: '/isaac_ai_robot_brain'
+---
+
+import React from 'react'
+
+export const frontmatter = {
+  title: 'Module 3: The AI-Robot Brain (NVIDIA Isaac)',
+  sidebar_label: 'Isaac AI-Robot Brain',
+  slug: '/isaac_ai_robot_brain'
+}
+
+// LanguageSelector component: minimal, accessible, and client-side only.
+// Place this at the top of each chapter .mdx (or import it from a shared component file).
+
+export function LanguageSelector({ defaultLang = 'en' }) {
+  const [lang, setLang] = React.useState(defaultLang)
+
+  React.useEffect(() => {
+    // keep selection in localStorage so user choice persists across pages
+    try { localStorage.setItem('book_lang', lang) } catch (e) {}
+  }, [lang])
+
+  return (
+    <div className="language-selector" aria-label="Choose language" style={{ marginBottom: '1rem' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <button onClick={() => setLang('en')} aria-pressed={lang === 'en'}>English</button>
+        <button onClick={() => setLang('ur')} aria-pressed={lang === 'ur'}>اردو</button>
+        <button onClick={() => setLang('ru')} aria-pressed={lang === 'ru'}>Roman Urdu</button>
+        <button onClick={() => setLang('ar')} aria-pressed={lang === 'ar'}>العربية</button>
+        <button onClick={() => setLang('de')} aria-pressed={lang === 'de'}>Deutsch</button>
+      </div>
+
+      <style>{`
+        .language-selector button { padding: 0.45rem 0.7rem; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08); background: transparent; cursor: pointer; }
+        .language-selector button[aria-pressed="true"] { box-shadow: 0 0 0 3px rgba(0,0,0,0.04) inset; font-weight: 600; }
+      `}</style>
+
+      {/* Hidden inputs to allow CSS-only targeting if desired */}
+      <input type="hidden" id="selected-lang" value={lang} />
+
+      {/* Render translations container statefully */}
+      <div>
+        {/* The translation blocks below are always present in the .mdx (for RAG / offline retrieval),
+            but they include a data-language attribute and are hidden unless selected. */}
+        <div data-language="en" style={{ display: lang === 'en' ? 'block' : 'none' }}>
+          {/* English content will appear here (can duplicate main content or provide summary). */}
+        </div>
+        <div data-language="ur" style={{ display: lang === 'ur' ? 'block' : 'none' }}>
+          {/* Urdu translation block */}
+        </div>
+        <div data-language="ru" style={{ display: lang === 'ru' ? 'block' : 'none' }}>
+          {/* Roman Urdu translation block */}
+        </div>
+        <div data-language="ar" style={{ display: lang === 'ar' ? 'block' : 'none' }}>
+          {/* Arabic translation block */}
+        </div>
+        <div data-language="de" style={{ display: lang === 'de' ? 'block' : 'none' }}>
+          {/* German translation block */}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function Chapter() {
+  return (
+    <>
+      <h1>{frontmatter.title}</h1>
+
+      <LanguageSelector defaultLang={typeof window !== 'undefined' ? (localStorage.getItem('book_lang') || 'en') : 'en'} />
+
+      ## Isaac Sim Overview
+
+      Isaac Sim is NVIDIA's comprehensive robotics simulation platform that provides a photorealistic environment for developing, testing, and training AI-powered robots. It combines high-fidelity physics simulation with advanced rendering capabilities to create digital twins of real-world robotic systems.
+
+      ### Key Features
+
+      - **Photorealistic Rendering**: Uses NVIDIA Omniverse for high-fidelity visual simulation
+      - **Physics Simulation**: Accurate physics modeling with PhysX engine
+      - **AI Training Environment**: Built-in tools for reinforcement learning and synthetic data generation
+      - **ROS 2 Integration**: Native support for ROS 2 communication protocols
+      - **Isaac ROS Packages**: Collection of perception, navigation, and manipulation packages
+
+      ## Synthetic Data Generation
+
+      Isaac Sim excels at generating synthetic data for training AI models. This approach allows for:
+
+      - Massive datasets without real-world collection constraints
+      - Perfect ground truth annotations
+      - Diverse scenarios and edge cases
+      - Consistent lighting and environmental conditions
+
+      ### Data Pipeline
+
+      1. Scene configuration with diverse assets
+      2. Randomization of object properties
+      3. Sensor simulation (RGB, depth, LiDAR)
+      4. Ground truth generation
+      5. Export to training-ready formats
+
+      ## Isaac ROS Perception Stack
+
+      The Isaac ROS suite provides optimized perception packages that leverage NVIDIA's GPU acceleration:
+
+      - **Isaac ROS Apriltag**: High-performance fiducial marker detection
+      - **Isaac ROS DNN Inference**: GPU-accelerated neural network inference
+      - **Isaac ROS Image Pipeline**: Optimized image processing and rectification
+      - **Isaac ROS Visual SLAM**: Visual Simultaneous Localization and Mapping
+
+      ## VSLAM & Navigation
+
+      Visual SLAM (Simultaneous Localization and Mapping) is crucial for robot autonomy. Isaac Sim provides:
+
+      - Realistic camera models and distortion
+      - Feature tracking and mapping algorithms
+      - Loop closure detection
+      - 3D reconstruction capabilities
+
+      ## Nav2 for Humanoids
+
+      The Navigation2 stack adapted for humanoid robots in Isaac Sim includes:
+
+      - Path planning algorithms
+      - Local and global costmaps
+      - Controller plugins for bipedal locomotion
+      - Behavior trees for complex navigation tasks
+
+      ### Images
+
+      ![Isaac Sim Interface](static/img/isaac_ai_robot_brain/isaac_sim_interface.png)
+
+      ![NVIDIA Isaac ROS Architecture](static/img/isaac_ai_robot_brain/isaac_ros_architecture.png)
+
+      ### Multilingual Section
+
+      <div id="multilingual-section">
+
+      <div data-language="en">
+
+      ## Multilingual Section — English
+
+      This is the English translation and original content for the Isaac AI-Robot Brain chapter.
+
+      </div>
+
+      <div data-language="ur">
+
+      ## Multilingual Section — اردو
+
+      یہ Isaac AI-Robot Brain کا باب کا اردو ترجمہ ہے۔
+
+      </div>
+
+      <div data-language="ru">
+
+      ## Multilingual Section — Roman Urdu
+
+      Ye Isaac AI-Robot Brain ka Roman Urdu tarjuma hai.
+
+      </div>
+
+      <div data-language="ar">
+
+      ## Multilingual Section — العربية
+
+      هذا هو ترجمة فصل Isaac AI-Robot Brain إلى العربية.
+
+      </div>
+
+      <div data-language="de">
+
+      ## Multilingual Section — Deutsch
+
+      Dies ist die deutsche Übersetzung des Isaac AI-Robot Brain Kapitels.
+
+      </div>
+
+      </div>
+
+    </>
+  )
+}
