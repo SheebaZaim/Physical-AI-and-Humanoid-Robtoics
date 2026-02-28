@@ -45,15 +45,73 @@ function HomepageHeader() {
           {/* Right — Robot Image */}
           <div className={styles.heroImageWrap}>
             <div className={styles.imageGlowRing}></div>
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Cassie_robot.jpg/440px-Cassie_robot.jpg"
-              alt="Cassie Bipedal Robot"
-              className={styles.robotImg}
-              onError={(e) => {
-                e.target.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Atlas_from_boston_dynamics.jpg/440px-Atlas_from_boston_dynamics.jpg';
-              }}
-            />
-            <div className={styles.imageCaption}>Cassie — Bipedal Robot by Agility Robotics</div>
+            {/* Humanoid Robot SVG Illustration */}
+            <svg className={styles.robotImg} viewBox="0 0 300 480" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#6366f1"/>
+                  <stop offset="100%" stopColor="#a855f7"/>
+                </linearGradient>
+                <linearGradient id="faceGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#1e293b"/>
+                  <stop offset="100%" stopColor="#0f172a"/>
+                </linearGradient>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                  <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+              {/* Glow aura */}
+              <ellipse cx="150" cy="420" rx="90" ry="18" fill="rgba(99,102,241,0.25)"/>
+              {/* Legs */}
+              <rect x="95" y="340" width="42" height="90" rx="12" fill="url(#bodyGrad)" opacity="0.9"/>
+              <rect x="163" y="340" width="42" height="90" rx="12" fill="url(#bodyGrad)" opacity="0.9"/>
+              {/* Feet */}
+              <rect x="85" y="418" width="58" height="20" rx="8" fill="#4f46e5"/>
+              <rect x="157" y="418" width="58" height="20" rx="8" fill="#4f46e5"/>
+              {/* Torso */}
+              <rect x="75" y="195" width="150" height="155" rx="20" fill="url(#bodyGrad)"/>
+              {/* Chest panel */}
+              <rect x="95" y="215" width="110" height="80" rx="12" fill="rgba(15,23,42,0.5)"/>
+              {/* Chest lights */}
+              <circle cx="120" cy="245" r="8" fill="#06b6d4" filter="url(#glow)" opacity="0.9"/>
+              <circle cx="150" cy="245" r="8" fill="#a855f7" filter="url(#glow)" opacity="0.9"/>
+              <circle cx="180" cy="245" r="8" fill="#6366f1" filter="url(#glow)" opacity="0.9"/>
+              {/* Progress bar on chest */}
+              <rect x="100" y="268" width="100" height="8" rx="4" fill="rgba(255,255,255,0.1)"/>
+              <rect x="100" y="268" width="72" height="8" rx="4" fill="#06b6d4"/>
+              {/* Arms */}
+              <rect x="25" y="200" width="44" height="120" rx="14" fill="url(#bodyGrad)" opacity="0.85"/>
+              <rect x="231" y="200" width="44" height="120" rx="14" fill="url(#bodyGrad)" opacity="0.85"/>
+              {/* Hands */}
+              <circle cx="47" cy="332" r="18" fill="#4f46e5"/>
+              <circle cx="253" cy="332" r="18" fill="#4f46e5"/>
+              {/* Neck */}
+              <rect x="128" y="168" width="44" height="32" rx="8" fill="#4f46e5"/>
+              {/* Head */}
+              <rect x="72" y="80" width="156" height="100" rx="28" fill="url(#bodyGrad)"/>
+              {/* Face screen */}
+              <rect x="88" y="92" width="124" height="76" rx="16" fill="url(#faceGrad)"/>
+              {/* Eyes */}
+              <rect x="100" y="108" width="42" height="28" rx="8" fill="#06b6d4" filter="url(#glow)" opacity="0.95"/>
+              <rect x="158" y="108" width="42" height="28" rx="8" fill="#06b6d4" filter="url(#glow)" opacity="0.95"/>
+              {/* Eye pupils */}
+              <circle cx="121" cy="122" r="8" fill="white" opacity="0.9"/>
+              <circle cx="179" cy="122" r="8" fill="white" opacity="0.9"/>
+              <circle cx="124" cy="122" r="4" fill="#0f172a"/>
+              <circle cx="182" cy="122" r="4" fill="#0f172a"/>
+              {/* Mouth — smile */}
+              <path d="M108 148 Q150 165 192 148" stroke="#a5b4fc" strokeWidth="3" fill="none" strokeLinecap="round"/>
+              {/* Antenna */}
+              <rect x="145" y="52" width="10" height="30" rx="5" fill="#6366f1"/>
+              <circle cx="150" cy="46" r="10" fill="#a855f7" filter="url(#glow)"/>
+              {/* Shoulder details */}
+              <circle cx="75" cy="200" r="16" fill="#4f46e5"/>
+              <circle cx="225" cy="200" r="16" fill="#4f46e5"/>
+              {/* AI label */}
+              <text x="150" y="302" textAnchor="middle" fill="#a5b4fc" fontSize="13" fontWeight="700" fontFamily="monospace">PHYSICAL AI</text>
+            </svg>
+            <div className={styles.imageCaption}>Humanoid Robot — Physical AI Platform</div>
             {/* Floating stat cards */}
             <div className={`${styles.floatCard} ${styles.floatCardTop}`}>
               <span className={styles.floatCardIcon}>📦</span>

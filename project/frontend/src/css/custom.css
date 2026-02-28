@@ -173,31 +173,59 @@
 /* Mermaid Diagrams */
 .mermaid {
   background: #ffffff !important;
-  border-radius: 12px;
-  font-size: 16px !important;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
+  border-radius: 16px;
+  font-size: 17px !important;
+  padding: 2rem;
+  margin: 2rem 0;
   border: 1px solid rgba(129, 140, 248, 0.2);
   overflow-x: auto;
+  min-width: 100%;
+  width: 100%;
+}
+
+.mermaid svg {
+  min-width: 600px;
+  width: 100% !important;
+  height: auto !important;
+  font-size: 17px !important;
 }
 
 [data-theme='dark'] .mermaid {
   background: #1e293b !important;
-  border: 1px solid rgba(129, 140, 248, 0.3);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(129, 140, 248, 0.4);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
 }
 
 [data-theme='dark'] .mermaid svg {
   color-scheme: dark;
 }
 
-/* Mermaid node labels readable in dark mode */
-[data-theme='dark'] .mermaid .label,
+/* All Mermaid text — large and visible */
+.mermaid text,
+.mermaid .label,
+.mermaid .nodeLabel,
+.mermaid .edgeLabel,
+.mermaid span {
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+
 [data-theme='dark'] .mermaid text,
-[data-theme='dark'] .mermaid .nodeLabel {
+[data-theme='dark'] .mermaid .label,
+[data-theme='dark'] .mermaid .nodeLabel,
+[data-theme='dark'] .mermaid .edgeLabel {
   color: #e2e8f0 !important;
   fill: #e2e8f0 !important;
   font-size: 15px !important;
+}
+
+/* Subgraph labels */
+[data-theme='dark'] .mermaid .cluster span,
+[data-theme='dark'] .mermaid .cluster-label {
+  color: #a5b4fc !important;
+  fill: #a5b4fc !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
 }
 
 /* Code Blocks - Enhanced */

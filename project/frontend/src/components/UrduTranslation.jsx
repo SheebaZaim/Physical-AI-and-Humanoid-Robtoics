@@ -1,87 +1,105 @@
 import React, { useState } from 'react';
 import styles from './UrduTranslation.module.css';
 
-// Backend URL — points to the Hugging Face Spaces deployment.
-// Update this value if your HF Space username or repo name differs.
 const API_BASE_URL = 'https://sheeba0321-humanoid-book.hf.space';
 
+const LANGUAGES = [
+  { code: 'ur', label: 'اردو',    flag: '🇵🇰', direction: 'rtl' },
+  { code: 'nl', label: 'Dutch',   flag: '🇳🇱', direction: 'ltr' },
+];
+
 const getPageContent = () => {
-  // Try to get the main doc article content from the DOM
   const article = document.querySelector('article');
   if (article) {
-    const text = article.innerText || article.textContent || '';
-    // Limit to first 2000 chars to stay within API limits
-    return text.trim().substring(0, 2000);
+    return (article.innerText || article.textContent || '').trim().substring(0, 2000);
   }
   return document.title || 'Page content';
 };
 
 const UrduTranslation = ({ content }) => {
-  const [isTranslated, setIsTranslated] = useState(false);
-  const [translatedContent, setTranslatedContent] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [activeLang, setActiveLang]         = useState(null); // null = original
+  const [translations, setTranslations]     = useState({});   // { ur: '...', nl: '...' }
+  const [loadingLang, setLoadingLang]       = useState(null);
+  const [error, setError]                   = useState(null);
 
-  const toggleTranslation = async () => {
-    if (!isTranslated) {
-      setIsLoading(true);
-      setError(null);
+  const handleLanguage = async (lang) => {
+    // Toggle off if already active
+    if (activeLang === lang.code) {
+      setActiveLang(null);
+      return;
+    }
 
-      // Use passed content or auto-detect page content
-      const textToTranslate = content || getPageContent();
+    // Use cached translation if available
+    if (translations[lang.code]) {
+      setActiveLang(lang.code);
+      return;
+    }
 
-      try {
-        // Call the backend translation API
-        const response = await fetch(`${API_BASE_URL}/api/v1/translation/translate`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            text: textToTranslate,
-            target_language: 'ur',
-            source_language: 'en'
-          }),
-        });
+    setLoadingLang(lang.code);
+    setError(null);
+    const textToTranslate = content || getPageContent();
 
-        if (!response.ok) {
-          throw new Error(`Translation failed: ${response.statusText}`);
-        }
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v1/translation/translate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: textToTranslate,
+          target_language: lang.code,
+          source_language: 'en',
+        }),
+      });
 
-        const data = await response.json();
-        setTranslatedContent(data.translated_text);
-        setIsTranslated(true);
-      } catch (err) {
-        console.error('Translation error:', err);
-        setError('Translation failed. Please try again.');
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
-      setIsTranslated(false);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+
+      setTranslations(prev => ({ ...prev, [lang.code]: data.translated_text }));
+      setActiveLang(lang.code);
+    } catch (err) {
+      console.error('Translation error:', err);
+      setError('Translation failed. Please try again.');
+    } finally {
+      setLoadingLang(null);
     }
   };
 
+  const activeLangObj = LANGUAGES.find(l => l.code === activeLang);
+
   return (
     <div className={styles.translationContainer}>
-      <button
-        onClick={toggleTranslation}
-        className={styles.translateButton}
-        disabled={isLoading}
-      >
-        {isLoading ? 'ترجمہ کیا جا رہا ہے...' : (isTranslated ? 'انگریزی میں دیکھیں' : 'اردو میں ترجمہ کریں')}
-      </button>
+      {/* Language buttons */}
+      <div className={styles.langRow}>
+        <span className={styles.langLabel}>🌐 Translate:</span>
+        {LANGUAGES.map(lang => (
+          <button
+            key={lang.code}
+            onClick={() => handleLanguage(lang)}
+            disabled={loadingLang === lang.code}
+            className={`${styles.langBtn} ${activeLang === lang.code ? styles.langBtnActive : ''}`}
+          >
+            {loadingLang === lang.code
+              ? '⏳ ...'
+              : `${lang.flag} ${lang.label}`}
+          </button>
+        ))}
+        {activeLang && (
+          <button className={styles.resetBtn} onClick={() => setActiveLang(null)}>
+            ✕ Original
+          </button>
+        )}
+      </div>
 
-      {error && (
-        <div className={styles.error}>
-          {error}
-        </div>
-      )}
+      {error && <div className={styles.error}>{error}</div>}
 
-      {isTranslated && (
-        <div className={styles.urduContent}>
-          <h4>ترجمہ:</h4>
-          <p className={styles.urduText}>{translatedContent}</p>
+      {activeLang && translations[activeLang] && (
+        <div
+          className={styles.translatedContent}
+          dir={activeLangObj?.direction || 'ltr'}
+        >
+          <div className={styles.translatedHeader}>
+            {activeLangObj?.flag} {activeLangObj?.label} Translation
+          </div>
+          <p className={styles.translatedText}>{translations[activeLang]}</p>
         </div>
       )}
     </div>
