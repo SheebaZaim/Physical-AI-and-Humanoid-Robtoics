@@ -135,12 +135,22 @@ async def public_ask_question(
     session_id: str = None,
     chapter_id: str = None,
     selected_text: str = "",
+    depth_level: str = None,
+    hardware_assumptions: str = None,
 ):
     """
     Ask a question to the AI assistant (no authentication required).
+    Optionally pass depth_level and hardware_assumptions to personalise the response.
     """
     try:
         ai_service = AIService()
+
+        user_preferences = None
+        if depth_level or hardware_assumptions:
+            user_preferences = {
+                "depth_level": depth_level or "intermediate",
+                "hardware_assumptions": hardware_assumptions or "simulation",
+            }
 
         if selected_text:
             response = await ai_service.get_contextual_response(
@@ -157,7 +167,8 @@ async def public_ask_question(
         else:
             response = await ai_service.get_chat_response(
                 query=question,
-                session_id=session_id
+                session_id=session_id,
+                user_preferences=user_preferences,
             )
 
         return response

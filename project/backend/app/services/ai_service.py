@@ -41,16 +41,18 @@ class AIService:
         return result
 
     async def get_chat_response(self, query: str, session_id: Optional[str] = None,
-                               user_id: Optional[int] = None, db: Optional[Session] = None) -> Dict[str, Any]:
-        """Get a chat response, incorporating user preferences if available."""
-        user_preferences = None
+                               user_id: Optional[int] = None, db: Optional[Session] = None,
+                               user_preferences: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Get a chat response, incorporating user preferences if available.
 
-        if user_id and db:
-            # Fetch user preferences for personalization
+        user_preferences can be supplied directly (e.g. from anonymous frontend session)
+        or will be fetched from the database when user_id + db are provided.
+        """
+        if user_preferences is None and user_id and db:
+            # Fetch user preferences from the database
             user_prefs = personalization_setting.get_by_user(db, user_id=user_id)
             if user_prefs:
-                # Use the most recent preferences
-                latest_pref = user_prefs[-1]  # Assuming last one is the most recent
+                latest_pref = user_prefs[-1]
                 user_preferences = {
                     "depth_level": latest_pref.depth_level,
                     "hardware_assumptions": latest_pref.hardware_assumptions
