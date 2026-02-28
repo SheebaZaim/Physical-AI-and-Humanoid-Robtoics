@@ -106,6 +106,20 @@ def read_chat_messages_by_session(
     return messages
 
 
+@router.get("/debug-ai", response_model=Dict[str, Any])
+async def debug_ai_status():
+    """Check AI service configuration (no auth required)."""
+    import os
+    from app.core.config import settings
+    return {
+        "gemini_key_set": bool(settings.GEMINI_API_KEY),
+        "qdrant_url_set": bool(settings.QDRANT_URL),
+        "qdrant_api_key_set": bool(settings.QDRANT_API_KEY),
+        "openrouter_key_set": bool(settings.OPENROUTER_API_KEY),
+        "openrouter_model": settings.OPENROUTER_MODEL,
+    }
+
+
 @router.post("/public-ask", response_model=Dict[str, Any])
 async def public_ask_question(
     *,
