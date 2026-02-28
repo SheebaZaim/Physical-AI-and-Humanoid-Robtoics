@@ -160,11 +160,11 @@ class EmbeddingEngine:
         """Search for similar documents based on a query."""
         query_embedding = await self.generate_embedding(query)
 
-        search_results = self.qdrant_client.search(
+        search_results = self.qdrant_client.query_points(
             collection_name=self.collection_name,
-            query_vector=query_embedding,
+            query=query_embedding,
             limit=limit
-        )
+        ).points
 
         results = []
         for hit in search_results:
