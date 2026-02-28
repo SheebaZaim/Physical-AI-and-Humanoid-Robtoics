@@ -3,7 +3,7 @@ import styles from './UrduTranslation.module.css';
 
 // Backend URL — points to the Hugging Face Spaces deployment.
 // Update this value if your HF Space username or repo name differs.
-const API_BASE_URL = 'https://nafay-physical-ai-book-backend.hf.space';
+const API_BASE_URL = 'https://sheeba0321-humanoid-book.hf.space';
 
 const getPageContent = () => {
   // Try to get the main doc article content from the DOM
