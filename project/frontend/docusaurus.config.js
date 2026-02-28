@@ -8,14 +8,11 @@ const config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://your-domain.github.io',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
+  url: 'https://physical-ai-and-humanoid-robtoics.vercel.app',
   baseUrl: '/',
 
-  // GitHub pages deployment config.
-  organizationName: 'your-organization', // Usually your GitHub org/user name.
-  projectName: 'physical-ai-book', // Usually your repo name.
+  organizationName: 'SheebaZaim',
+  projectName: 'Physical-AI-and-Humanoid-Robtoics',
 
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
