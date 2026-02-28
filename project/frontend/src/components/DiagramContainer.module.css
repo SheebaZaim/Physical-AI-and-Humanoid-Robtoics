@@ -1,0 +1,30 @@
+.diagramContainer {
+  margin: 2rem 0;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fafafa;
+  text-align: center;
+}
+
+.diagramWrapper {
+  display: inline-block;
+  max-width: 100%;
+}
+
+.diagramTitle {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #1a73e8;
+  font-size: 1.2rem;
+}
+
+.diagramContent {
+  margin-bottom: 0.5rem;
+}
+
+.caption {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  color: #666;
+}

@@ -1,0 +1,1 @@
+"""App package for the Educational Book Platform."""

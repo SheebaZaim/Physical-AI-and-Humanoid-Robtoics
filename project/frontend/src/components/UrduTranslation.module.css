@@ -1,0 +1,34 @@
+.translationContainer {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+.translateButton {
+  background-color: #34a853;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.translateButton:hover {
+  background-color: #2d8e47;
+}
+
+.urduContent {
+  direction: rtl;
+  text-align: right;
+}
+
+.urduText {
+  font-family: 'Jameel Noori Nastaleeq', 'Urdu Typesetting', serif;
+  font-size: 1.1em;
+  line-height: 1.8;
+  color: #333;
+}

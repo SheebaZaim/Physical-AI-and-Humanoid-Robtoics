@@ -1,0 +1,8 @@
+{
+  "label": "Physical AI & Humanoid Robotics",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "Comprehensive guide to Physical AI & Humanoid Robotics covering ROS 2, Gazebo, NVIDIA Isaac, Vision Language Action models, and capstone projects."
+  }
+}

@@ -1,0 +1,16 @@
+.docItemContainer {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.docTitle {
+  color: #222;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+@media (min-width: 997px) {
+  .docItemContainer {
+    padding: 0 2rem;
+  }
+}
