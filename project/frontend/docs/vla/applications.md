@@ -2,757 +2,1027 @@
 sidebar_position: 3
 ---
 
-# VLA Model Applications
+# VLA Model Applications in the Real World
 
-## Overview
+Vision-Language-Action models are transitioning from research labs to production deployments. This chapter explores how VLA models are applied in practice — from industrial manipulation to healthcare — with complete, working implementation examples.
 
-Vision Language Action (VLA) models have numerous applications across robotics and automation. This chapter explores practical implementations of VLA models in real-world scenarios, from industrial automation to assistive robotics.
+## Application Landscape
 
-<DiagramContainer title="VLA Applications Landscape" caption="Various application domains for VLA models">
-  ```mermaid
-  graph TB
-      A[VLA Models] --> B[Industrial Robotics]
-      A --> C[Service Robotics]
-      A --> D[Healthcare Robotics]
-      A --> E[Agricultural Robotics]
-      A --> F[Logistics Robotics]
+```mermaid
+graph TB
+    VLA[VLA Models] --> IND[Industrial Robotics]
+    VLA --> SVC[Service Robotics]
+    VLA --> HC[Healthcare Robotics]
+    VLA --> AGR[Agricultural Robotics]
+    VLA --> LOG[Logistics & Warehouse]
+    VLA --> HUM[Humanoid Robots]
 
-      B --> B1[Assembly Lines]
-      B --> B2[Quality Control]
-      B --> B3[Material Handling]
+    IND --> IND1[Assembly & kitting]
+    IND --> IND2[Quality inspection]
+    IND --> IND3[Machine tending]
 
-      C --> C1[Domestic Assistance]
-      C --> C2[Restaurant Service]
-      C --> C3[Elderly Care]
+    SVC --> SVC1[Kitchen assistance]
+    SVC --> SVC2[Cleaning robots]
+    SVC --> SVC3[Reception/delivery]
 
-      D --> D1[Rehabilitation]
-      D --> D2[Medical Assistance]
-      D --> D3[Surgical Support]
+    HC --> HC1[Surgical assistance]
+    HC --> HC2[Rehabilitation]
+    HC --> HC3[Patient monitoring]
 
-      E --> E1[Harvesting]
-      E --> E2[Weeding]
-      E --> E3[Monitoring]
-
-      F --> F1[Warehouse Operations]
-      F --> F2[Inventory Management]
-      F --> F3[Delivery Robots]
-  ```
-</DiagramContainer>
-
-## Industrial Robotics Applications
-
-### Assembly Line Automation
-
-VLA models can revolutionize assembly line operations by enabling robots to understand complex instructions and adapt to variations in parts and processes.
-
-#### Example: Adaptive Part Assembly
-
-```python
-import numpy as np
-import cv2
-from typing import Dict, List, Tuple
-
-class AssemblyVLA:
-    def __init__(self):
-        # Initialize vision, language, and action components
-        self.vision_system = VisionSystem()
-        self.language_interpreter = LanguageInterpreter()
-        self.action_planner = ActionPlanner()
-
-    def process_assembly_task(self, image: np.ndarray, instruction: str) -> Dict:
-        """
-        Process an assembly task instruction
-
-        Args:
-            image: Current scene image
-            instruction: Natural language instruction
-
-        Returns:
-            Dictionary containing action sequence and confidence
-        """
-        # Parse the instruction
-        parsed_instruction = self.language_interpreter.parse(instruction)
-
-        # Identify objects in the scene
-        scene_objects = self.vision_system.detect_objects(image)
-
-        # Plan the assembly sequence
-        action_sequence = self.action_planner.plan_assembly(
-            parsed_instruction,
-            scene_objects
-        )
-
-        # Generate confidence scores
-        confidence_scores = self.assess_feasibility(
-            action_sequence,
-            scene_objects
-        )
-
-        return {
-            'action_sequence': action_sequence,
-            'confidence': confidence_scores,
-            'objects': scene_objects,
-            'parsed_instruction': parsed_instruction
-        }
-
-    def assess_feasibility(self, actions: List, objects: Dict) -> Dict:
-        """Assess the feasibility of planned actions"""
-        confidence = {}
-
-        for i, action in enumerate(actions):
-            # Check if required objects are present
-            required_parts = action.get('required_parts', [])
-            available_parts = [obj['type'] for obj in objects.values()]
-
-            # Calculate confidence based on object availability and action complexity
-            part_availability = sum(1 for part in required_parts if part in available_parts)
-            confidence[i] = min(1.0, part_availability / len(required_parts))
-
-        return confidence
-
-# Example usage
-def example_assembly():
-    vla_system = AssemblyVLA()
-
-    # Example instruction
-    instruction = "Take the red gear and place it on the blue shaft, then tighten with the silver bolt"
-
-    # Example image (would be captured from robot's camera)
-    # image = cv2.imread("assembly_scene.jpg")
-
-    # For demonstration, create a mock image
-    image = np.zeros((480, 640, 3), dtype=np.uint8)
-
-    result = vla_system.process_assembly_task(image, instruction)
-
-    print(f"Action sequence: {result['action_sequence']}")
-    print(f"Confidence: {result['confidence']}")
+    HUM --> HUM1[Figure 02 dexterous tasks]
+    HUM --> HUM2[1X NEO household tasks]
+    HUM --> HUM3[Digit warehouse operations]
 ```
 
-### Quality Control Inspection
+## Application 1: Industrial Pick-and-Place with Language Instructions
 
-VLA models can perform visual inspection tasks with natural language descriptions of defects.
-
-#### Example: Defect Detection System
+Traditional pick-and-place systems are hard-coded for specific object geometries and positions. VLA-powered systems generalize to novel objects based on natural language descriptions.
 
 ```python
-class QualityControlVLA:
-    def __init__(self):
-        self.defect_detector = DefectDetector()
-        self.inspection_planner = InspectionPlanner()
-        self.reporting_system = ReportingSystem()
+#!/usr/bin/env python3
+"""
+Industrial pick-and-place VLA application.
+Integrates OpenVLA with ROS 2 for a 6-DOF robot arm.
+"""
 
-    def inspect_part(self, image: np.ndarray, criteria: str) -> Dict:
-        """
-        Inspect a part based on quality criteria
-
-        Args:
-            image: Image of the part to inspect
-            criteria: Quality criteria in natural language
-
-        Returns:
-            Inspection results and recommendations
-        """
-        # Detect defects
-        defects = self.defect_detector.analyze(image)
-
-        # Interpret criteria
-        interpreted_criteria = self.interpret_criteria(criteria)
-
-        # Assess compliance
-        compliance_report = self.assess_compliance(defects, interpreted_criteria)
-
-        # Generate recommendations
-        recommendations = self.generate_recommendations(compliance_report)
-
-        return {
-            'defects': defects,
-            'criteria': interpreted_criteria,
-            'compliance': compliance_report,
-            'recommendations': recommendations
-        }
-
-    def interpret_criteria(self, criteria: str) -> Dict:
-        """Interpret natural language quality criteria"""
-        # This would use NLP to extract specific requirements
-        # e.g., "no scratches longer than 2mm", "surface roughness < 1.6μm"
-        criteria_dict = {}
-
-        if "scratches" in criteria.lower():
-            criteria_dict['max_scratch_length'] = self.extract_dimension(criteria, "scratches")
-
-        if "surface" in criteria.lower():
-            criteria_dict['surface_roughness'] = self.extract_roughness(criteria)
-
-        return criteria_dict
-
-    def extract_dimension(self, text: str, feature: str) -> float:
-        """Extract dimensional requirements from text"""
-        # Simple regex-based extraction (would be more sophisticated in practice)
-        import re
-        matches = re.findall(r'(\d+\.?\d*)\s*mm', text)
-        return float(matches[0]) if matches else 0.0
-
-    def assess_compliance(self, defects: List, criteria: Dict) -> Dict:
-        """Assess whether defects meet quality criteria"""
-        compliant = True
-        violations = []
-
-        for defect in defects:
-            if defect['type'] == 'scratch' and 'max_scratch_length' in criteria:
-                if defect['length'] > criteria['max_scratch_length']:
-                    compliant = False
-                    violations.append(f"Scratch too long: {defect['length']}mm > {criteria['max_scratch_length']}mm")
-
-        return {
-            'compliant': compliant,
-            'violations': violations
-        }
-
-    def generate_recommendations(self, compliance_report: Dict) -> List[str]:
-        """Generate recommendations based on compliance report"""
-        recommendations = []
-
-        if not compliance_report['compliant']:
-            recommendations.append("Part does not meet quality standards")
-            recommendations.extend(compliance_report['violations'])
-            recommendations.append("Reject this part and investigate root cause")
-        else:
-            recommendations.append("Part meets quality standards")
-            recommendations.append("Accept for next process step")
-
-        return recommendations
-```
-
-## Service Robotics Applications
-
-### Domestic Assistance
-
-VLA models enable robots to perform household tasks based on natural language commands.
-
-#### Example: Kitchen Assistance Robot
-
-```python
-class KitchenAssistantVLA:
-    def __init__(self):
-        self.scene_analyzer = KitchenSceneAnalyzer()
-        self.recipe_interpreter = RecipeInterpreter()
-        self.task_planner = KitchenTaskPlanner()
-        self.safety_checker = SafetyChecker()
-
-    def execute_kitchen_task(self, image: np.ndarray, command: str) -> Dict:
-        """
-        Execute kitchen assistance task
-
-        Args:
-            image: Current kitchen scene
-            command: Natural language command
-
-        Returns:
-            Execution plan and safety checks
-        """
-        # Analyze kitchen scene
-        kitchen_state = self.scene_analyzer.analyze(image)
-
-        # Interpret the command
-        task_plan = self.recipe_interpreter.interpret_command(command, kitchen_state)
-
-        # Plan the execution
-        execution_plan = self.task_planner.plan_task(task_plan, kitchen_state)
-
-        # Check safety constraints
-        safety_report = self.safety_checker.check_safety(execution_plan, kitchen_state)
-
-        return {
-            'execution_plan': execution_plan,
-            'kitchen_state': kitchen_state,
-            'safety_report': safety_report,
-            'estimated_time': self.estimate_execution_time(execution_plan)
-        }
-
-    def estimate_execution_time(self, plan: List) -> float:
-        """Estimate time to execute the plan"""
-        total_time = 0.0
-
-        for action in plan:
-            # Different actions take different amounts of time
-            action_type = action.get('type', '')
-            if 'move' in action_type:
-                total_time += 2.0  # seconds
-            elif 'grasp' in action_type:
-                total_time += 3.0
-            elif 'place' in action_type:
-                total_time += 2.5
-            elif 'pour' in action_type:
-                total_time += 5.0
-            else:
-                total_time += 1.0
-
-        return total_time
-
-# Example kitchen scene analyzer
-class KitchenSceneAnalyzer:
-    def analyze(self, image: np.ndarray) -> Dict:
-        """Analyze kitchen scene and identify objects and their states"""
-        # This would use computer vision to identify:
-        # - Appliances (stove, fridge, microwave)
-        # - Utensils (pots, pans, knives)
-        # - Ingredients (containers, food items)
-        # - Surfaces (counters, stovetop)
-
-        return {
-            'appliances': {
-                'stove': {'state': 'off', 'burners': [False, False, True, False]},
-                'fridge': {'state': 'closed', 'temperature': 4.0}
-            },
-            'utensils': {
-                'pot_1': {'location': 'counter_left', 'contents': 'empty'},
-                'pan_1': {'location': 'stove_center', 'contents': 'empty'}
-            },
-            'ingredients': {
-                'water': {'location': 'tap', 'available': True},
-                'oil': {'location': 'cupboard', 'amount': 'full'}
-            },
-            'surfaces': {
-                'counter_left': {'clear': True},
-                'counter_right': {'clear': False, 'occupied_by': 'cutting_board'}
-            }
-        }
-```
-
-## Healthcare Robotics Applications
-
-### Rehabilitation Assistance
-
-VLA models can assist in rehabilitation by understanding exercise instructions and monitoring patient performance.
-
-#### Example: Exercise Guidance Robot
-
-```python
-class RehabVLA:
-    def __init__(self):
-        self.pose_estimator = PoseEstimator()
-        self.exercise_interpreter = ExerciseInterpreter()
-        self.performance_analyzer = PerformanceAnalyzer()
-        self.feedback_generator = FeedbackGenerator()
-
-    def guide_exercise_session(self, image: np.ndarray, instruction: str) -> Dict:
-        """
-        Guide a rehabilitation exercise session
-
-        Args:
-            image: Patient performing exercise
-            instruction: Exercise instruction
-
-        Returns:
-            Guidance and performance feedback
-        """
-        # Estimate patient pose
-        patient_pose = self.pose_estimator.estimate(image)
-
-        # Interpret exercise requirements
-        exercise_requirements = self.exercise_interpreter.parse_exercise(instruction)
-
-        # Analyze performance
-        performance_metrics = self.performance_analyzer.evaluate(
-            patient_pose,
-            exercise_requirements
-        )
-
-        # Generate feedback
-        feedback = self.feedback_generator.create_feedback(
-            performance_metrics,
-            exercise_requirements
-        )
-
-        return {
-            'patient_pose': patient_pose,
-            'exercise_requirements': exercise_requirements,
-            'performance_metrics': performance_metrics,
-            'feedback': feedback
-        }
-
-    def monitor_progress(self, session_data: List[Dict]) -> Dict:
-        """Monitor patient progress over multiple sessions"""
-        # Analyze trends in performance metrics
-        improvement_metrics = {}
-
-        if len(session_data) > 1:
-            # Compare current performance to previous sessions
-            current_performance = session_data[-1]['performance_metrics']
-            previous_performance = session_data[-2]['performance_metrics']
-
-            for metric, current_val in current_performance.items():
-                if metric in previous_performance:
-                    improvement = current_val - previous_performance[metric]
-                    improvement_metrics[metric] = improvement
-
-        return improvement_metrics
-
-# Example performance analyzer
-class PerformanceAnalyzer:
-    def evaluate(self, pose: Dict, requirements: Dict) -> Dict:
-        """Evaluate exercise performance based on pose and requirements"""
-        metrics = {}
-
-        # Calculate joint angles
-        if 'shoulder' in pose and 'elbow' in pose:
-            shoulder_elbow_angle = self.calculate_angle(
-                pose['shoulder'],
-                pose['elbow'],
-                pose.get('wrist', pose['elbow'])  # Use elbow as proxy if wrist not available
-            )
-            metrics['shoulder_elbow_angle'] = shoulder_elbow_angle
-
-            # Check if angle matches exercise requirement
-            required_angle = requirements.get('required_angle', 90)
-            deviation = abs(shoulder_elbow_angle - required_angle)
-            metrics['angle_deviation'] = deviation
-            metrics['angle_accuracy'] = max(0, 100 - deviation)  # Accuracy percentage
-
-        # Calculate movement smoothness
-        metrics['smoothness'] = self.calculate_smoothness(pose)
-
-        return metrics
-
-    def calculate_angle(self, p1: Tuple, p2: Tuple, p3: Tuple) -> float:
-        """Calculate angle between three points"""
-        import math
-        v1 = (p1[0] - p2[0], p1[1] - p2[1])
-        v2 = (p3[0] - p2[0], p3[1] - p2[1])
-
-        dot_product = v1[0] * v2[0] + v1[1] * v2[1]
-        mag_v1 = math.sqrt(v1[0]**2 + v1[1]**2)
-        mag_v2 = math.sqrt(v2[0]**2 + v2[1]**2)
-
-        if mag_v1 * mag_v2 == 0:
-            return 0
-
-        cos_angle = dot_product / (mag_v1 * mag_v2)
-        angle_rad = math.acos(max(-1, min(1, cos_angle)))  # Clamp to valid range
-        angle_deg = math.degrees(angle_rad)
-
-        return angle_deg
-
-    def calculate_smoothness(self, pose: Dict) -> float:
-        """Calculate movement smoothness (simplified)"""
-        # This would normally require temporal analysis
-        # For now, return a placeholder value
-        return 85.0  # Good smoothness on 0-100 scale
-```
-
-## Agricultural Robotics Applications
-
-### Crop Monitoring and Management
-
-VLA models can assist farmers by interpreting crop conditions and providing management recommendations.
-
-#### Example: Crop Health Assessment
-
-```python
-class AgriculturalVLA:
-    def __init__(self):
-        self.crop_analyzer = CropAnalyzer()
-        self.condition_interpreter = ConditionInterpreter()
-        self.management_advisor = ManagementAdvisor()
-
-    def assess_crop_condition(self, image: np.ndarray, query: str) -> Dict:
-        """
-        Assess crop condition based on farmer's query
-
-        Args:
-            image: Image of crops
-            query: Farmer's question about crop condition
-
-        Returns:
-        """
-        # Analyze crop condition
-        crop_health = self.crop_analyzer.analyze(image)
-
-        # Interpret farmer's query
-        query_intent = self.condition_interpreter.interpret(query)
-
-        # Generate management advice
-        advice = self.management_advisor.provide_advice(
-            crop_health,
-            query_intent
-        )
-
-        return {
-            'crop_health': crop_health,
-            'query_intent': query_intent,
-            'advice': advice,
-            'confidence': self.calculate_confidence(advice)
-        }
-
-    def calculate_confidence(self, advice: Dict) -> float:
-        """Calculate confidence in the provided advice"""
-        # Confidence depends on image quality, detection certainty, etc.
-        return 0.85  # Placeholder value
-
-# Example crop analyzer
-class CropAnalyzer:
-    def analyze(self, image: np.ndarray) -> Dict:
-        """Analyze crop health indicators"""
-        # This would use computer vision to detect:
-        # - Plant color (indicating nutrient levels)
-        # - Leaf patterns (indicating diseases)
-        # - Growth patterns
-        # - Pest presence
-
-        return {
-            'nutrient_levels': {'nitrogen': 0.8, 'phosphorus': 0.6, 'potassium': 0.9},
-            'disease_indicators': [],
-            'growth_stage': 'vegetative',
-            'water_stress': 'low',
-            'pest_pressure': 'moderate'
-        }
-```
-
-## Logistics Robotics Applications
-
-### Warehouse Automation
-
-VLA models can optimize warehouse operations by understanding complex picking and packing instructions.
-
-#### Example: Warehouse Order Fulfillment
-
-```python
-class WarehouseVLA:
-    def __init__(self):
-        self.inventory_system = InventorySystem()
-        self.picking_planner = PickingPlanner()
-        self.packaging_planner = PackagingPlanner()
-
-    def process_order(self, order_description: str, warehouse_image: np.ndarray) -> Dict:
-        """
-        Process warehouse order based on natural language description
-
-        Args:
-            order_description: Natural language order description
-            warehouse_image: Current warehouse state image
-
-        Returns:
-            Picking and packing plan
-        """
-        # Parse order requirements
-        order_items = self.parse_order_description(order_description)
-
-        # Analyze warehouse state
-        warehouse_state = self.inventory_system.analyze(warehouse_image)
-
-        # Plan picking sequence
-        picking_plan = self.picking_planner.plan_picking(
-            order_items,
-            warehouse_state
-        )
-
-        # Plan packaging
-        packaging_plan = self.packaging_planner.plan_packaging(order_items)
-
-        return {
-            'order_items': order_items,
-            'warehouse_state': warehouse_state,
-            'picking_plan': picking_plan,
-            'packaging_plan': packaging_plan,
-            'estimated_completion_time': self.estimate_completion_time(picking_plan)
-        }
-
-    def parse_order_description(self, description: str) -> List[Dict]:
-        """Parse natural language order description"""
-        # This would use NLP to extract product names, quantities, etc.
-        # For example: "10 boxes of screws, 5 bags of cement, 2 power drills"
-
-        import re
-
-        # Simple regex-based parsing (would be more sophisticated in practice)
-        products = []
-
-        # Look for quantity-product pairs
-        quantity_pattern = r'(\d+)\s+(boxes?|bags?|items?|pieces?)\s+of\s+(\w+)'
-        matches = re.findall(quantity_pattern, description, re.IGNORECASE)
-
-        for match in matches:
-            quantity, unit, product = match
-            products.append({
-                'product': product,
-                'quantity': int(quantity),
-                'unit': unit
-            })
-
-        return products
-
-    def estimate_completion_time(self, picking_plan: List[Dict]) -> float:
-        """Estimate time to complete picking plan"""
-        # Each picking action takes approximately 30 seconds
-        # Each travel between locations takes time based on distance
-        base_time_per_item = 30.0  # seconds
-        travel_time_factor = 10.0  # seconds per aisle moved
-
-        estimated_time = len(picking_plan) * base_time_per_item
-
-        # Add travel time based on plan complexity
-        if len(picking_plan) > 5:
-            estimated_time += len(picking_plan) * travel_time_factor * 0.5
-        elif len(picking_plan) > 10:
-            estimated_time += len(picking_plan) * travel_time_factor
-
-        return estimated_time
-```
-
-## Integration with Existing Systems
-
-### ROS 2 Integration Example
-
-```python
 import rclpy
 from rclpy.node import Node
-from sensor_msgs.msg import Image
-from std_msgs.msg import String
-from geometry_msgs.msg import PoseStamped
+from rclpy.action import ActionClient
+import numpy as np
+import torch
+from PIL import Image as PILImage
 from cv_bridge import CvBridge
 
-class VLAROSInterface(Node):
+from sensor_msgs.msg import Image, JointState
+from std_msgs.msg import String, Bool
+from geometry_msgs.msg import PoseStamped, Pose, Point, Quaternion
+from control_msgs.action import FollowJointTrajectory
+from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+from builtin_interfaces.msg import Duration
+
+from transformers import AutoModelForVision2Seq, AutoProcessor
+
+
+class IndustrialPickPlaceVLA(Node):
+    """
+    VLA-powered pick-and-place system for industrial manipulation.
+
+    Workflow:
+    1. Receive pick instruction via /pick_command topic
+    2. Capture image from wrist-mounted camera
+    3. Run OpenVLA inference → get delta EE pose
+    4. Convert to joint trajectory via IK
+    5. Execute with Follow Joint Trajectory action
+    6. Repeat until task complete
+    """
+
     def __init__(self):
-        super().__init__('vla_ros_interface')
+        super().__init__('industrial_pick_place_vla')
 
-        # Initialize VLA system
-        self.vla_system = KitchenAssistantVLA()  # Could be any VLA application
+        # Parameters
+        self.declare_parameter('model_name', 'openvla/openvla-7b')
+        self.declare_parameter('camera_topic', '/wrist_camera/image_raw')
+        self.declare_parameter('max_steps', 50)
+        self.declare_parameter('action_scale', 0.05)  # 5cm per action step
 
-        # Create subscribers
-        self.image_sub = self.create_subscription(
-            Image, '/camera/rgb/image_raw', self.image_callback, 10)
+        model_name = self.get_parameter('model_name').get_parameter_value().string_value
+        camera_topic = self.get_parameter('camera_topic').get_parameter_value().string_value
+        self.max_steps = self.get_parameter('max_steps').get_parameter_value().integer_value
+        self.action_scale = self.get_parameter('action_scale').get_parameter_value().double_value
 
-        self.command_sub = self.create_subscription(
-            String, '/vla/command', self.command_callback, 10)
+        # Load VLA model
+        self.get_logger().info(f'Loading VLA model: {model_name}')
+        self._load_model(model_name)
 
-        # Create publishers
-        self.action_pub = self.create_publisher(PoseStamped, '/robot/action', 10)
-        self.status_pub = self.create_publisher(String, '/vla/status', 10)
-
-        # CV Bridge
+        # ROS interfaces
         self.bridge = CvBridge()
-
-        # State management
         self.current_image = None
-        self.pending_command = None
+        self.is_executing = False
 
-        self.get_logger().info('VLA ROS Interface initialized')
+        # Subscribers
+        self.img_sub = self.create_subscription(
+            Image, camera_topic, self.image_callback, 1
+        )
+        self.cmd_sub = self.create_subscription(
+            String, '/pick_command', self.command_callback, 10
+        )
 
-    def image_callback(self, msg):
-        """Handle incoming camera images"""
+        # Publishers
+        self.status_pub = self.create_publisher(String, '/pick_status', 10)
+        self.success_pub = self.create_publisher(Bool, '/pick_success', 10)
+        self.ee_pose_pub = self.create_publisher(PoseStamped, '/target_ee_pose', 10)
+
+        # Action client for trajectory execution
+        self.traj_client = ActionClient(
+            self, FollowJointTrajectory, '/arm_controller/follow_joint_trajectory'
+        )
+
+        # Current end-effector state
+        self.current_ee_pose = np.zeros(7)  # [x, y, z, rx, ry, rz, gripper]
+        self.current_ee_pose[2] = 0.5       # Start 50cm above table
+
+        self.get_logger().info('Industrial pick-place VLA ready')
+
+    def _load_model(self, model_name: str):
+        """Load VLA model with GPU acceleration."""
+        self.processor = AutoProcessor.from_pretrained(
+            model_name, trust_remote_code=True
+        )
+        self.model = AutoModelForVision2Seq.from_pretrained(
+            model_name,
+            torch_dtype=torch.bfloat16,
+            low_cpu_mem_usage=True,
+            trust_remote_code=True,
+        ).to('cuda' if torch.cuda.is_available() else 'cpu').eval()
+
+        self.get_logger().info(f'Model loaded on {next(self.model.parameters()).device}')
+
+    def image_callback(self, msg: Image):
+        """Store latest camera image."""
         try:
-            self.current_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
-
-            # If there's a pending command, process it
-            if self.pending_command:
-                self.process_command()
-
+            cv_img = self.bridge.imgmsg_to_cv2(msg, desired_encoding='rgb8')
+            self.current_image = PILImage.fromarray(cv_img)
         except Exception as e:
-            self.get_logger().error(f'Error processing image: {e}')
+            self.get_logger().error(f'Image conversion error: {e}')
 
-    def command_callback(self, msg):
-        """Handle incoming commands"""
-        self.pending_command = msg.data
-        self.get_logger().info(f'Received command: {msg.data}')
-
-        # Process immediately if we have an image
-        if self.current_image is not None:
-            self.process_command()
-
-    def process_command(self):
-        """Process the pending command with current image"""
-        if not self.current_image or not self.pending_command:
+    def command_callback(self, msg: String):
+        """Handle pick-place command."""
+        if self.is_executing:
+            self.get_logger().warn('Already executing a task, ignoring new command')
             return
 
+        instruction = msg.data
+        self.get_logger().info(f'Received command: "{instruction}"')
+
+        # Execute in background timer to not block callback
+        self.pending_instruction = instruction
+        self.create_timer(0.1, self._execute_task_once)
+
+    def _execute_task_once(self):
+        """Execute task (called once by timer)."""
+        self.timer.cancel()  # Cancel self after first call
+        self._run_task(self.pending_instruction)
+
+    def _run_task(self, instruction: str):
+        """Run complete pick-place task."""
+        self.is_executing = True
+        self._publish_status(f'Starting: {instruction}')
+
+        success = False
+
         try:
-            # Execute VLA system
-            result = self.vla_system.execute_kitchen_task(
-                self.current_image,
-                self.pending_command
-            )
+            for step in range(self.max_steps):
+                if self.current_image is None:
+                    self.get_logger().warn('No image received yet')
+                    rclpy.spin_once(self, timeout_sec=0.5)
+                    continue
 
-            # Publish actions to robot
-            for action in result['execution_plan']:
-                pose_msg = self.create_pose_message(action)
-                self.action_pub.publish(pose_msg)
+                # Infer action from VLA model
+                action = self._infer_action(self.current_image, instruction)
+                self._publish_status(f'Step {step+1}: action={action.round(3)}')
 
-            # Publish status
-            status_msg = String()
-            status_msg.data = f"Executed: {self.pending_command}"
-            self.status_pub.publish(status_msg)
+                # Apply action to EE pose
+                self.current_ee_pose = self._apply_action(self.current_ee_pose, action)
 
-            # Clear pending command
-            self.pending_command = None
+                # Publish target pose for visualization
+                self._publish_ee_pose(self.current_ee_pose)
+
+                # Check if gripper closed (task likely complete)
+                gripper_state = action[6]
+                if gripper_state < 0.3 and step > 5:
+                    # Gripper closed — check if pick succeeded
+                    success = self._check_pick_success()
+                    if success:
+                        self._publish_status('Pick succeeded!')
+                        break
+
+                rclpy.spin_once(self, timeout_sec=0.1)
 
         except Exception as e:
-            self.get_logger().error(f'Error executing command: {e}')
-            # Publish error status
-            status_msg = String()
-            status_msg.data = f"Error: {str(e)}"
-            self.status_pub.publish(status_msg)
+            self.get_logger().error(f'Task execution error: {e}')
 
-    def create_pose_message(self, action):
-        """Create a PoseStamped message from an action"""
-        pose = PoseStamped()
-        # Convert action to pose based on action type
-        # This is a simplified example
-        return pose
+        finally:
+            self.is_executing = False
+            result_msg = Bool()
+            result_msg.data = success
+            self.success_pub.publish(result_msg)
+
+    def _infer_action(self, image: PILImage.Image, instruction: str) -> np.ndarray:
+        """Run VLA model inference."""
+        prompt = f"In: What action should the robot take to {instruction}?\nOut:"
+
+        inputs = self.processor(prompt, image).to(
+            self.model.device, dtype=torch.bfloat16
+        )
+
+        with torch.no_grad():
+            action = self.model.predict_action(
+                **inputs,
+                unnorm_key="bridge_orig",
+                do_sample=False,
+            )
+
+        return action  # numpy [7]: [dx, dy, dz, drx, dry, drz, gripper]
+
+    def _apply_action(
+        self, current_pose: np.ndarray, action: np.ndarray
+    ) -> np.ndarray:
+        """Apply delta action to current EE pose."""
+        new_pose = current_pose.copy()
+
+        # Apply position delta (scaled)
+        new_pose[:3] += action[:3] * self.action_scale
+
+        # Apply rotation delta
+        new_pose[3:6] += action[3:6] * 0.1  # Smaller rotation scale
+
+        # Gripper state (direct)
+        new_pose[6] = action[6]
+
+        # Clamp to workspace limits
+        new_pose[0] = np.clip(new_pose[0], -0.5, 0.5)   # X: ±50cm
+        new_pose[1] = np.clip(new_pose[1], -0.5, 0.5)   # Y: ±50cm
+        new_pose[2] = np.clip(new_pose[2], 0.05, 0.8)   # Z: 5cm to 80cm above table
+        new_pose[6] = np.clip(new_pose[6], 0.0, 1.0)    # Gripper: 0 to 1
+
+        return new_pose
+
+    def _publish_ee_pose(self, pose: np.ndarray):
+        """Publish EE target pose for RViz visualization."""
+        msg = PoseStamped()
+        msg.header.stamp = self.get_clock().now().to_msg()
+        msg.header.frame_id = 'base_link'
+        msg.pose.position.x = float(pose[0])
+        msg.pose.position.y = float(pose[1])
+        msg.pose.position.z = float(pose[2])
+
+        # Convert Euler angles to quaternion
+        from scipy.spatial.transform import Rotation
+        r = Rotation.from_euler('xyz', pose[3:6])
+        quat = r.as_quat()
+        msg.pose.orientation.x = float(quat[0])
+        msg.pose.orientation.y = float(quat[1])
+        msg.pose.orientation.z = float(quat[2])
+        msg.pose.orientation.w = float(quat[3])
+
+        self.ee_pose_pub.publish(msg)
+
+    def _check_pick_success(self) -> bool:
+        """Simple heuristic: check if gripper position changed (object grasped)."""
+        # In real system: check force/torque sensor or gripper position feedback
+        return True  # Simplified for example
+
+    def _publish_status(self, status: str):
+        """Publish status message."""
+        msg = String()
+        msg.data = status
+        self.status_pub.publish(msg)
+        self.get_logger().info(status)
+
 
 def main(args=None):
     rclpy.init(args=args)
-    vla_interface = VLAROSInterface()
-    rclpy.spin(vla_interface)
-    vla_interface.destroy_node()
+    node = IndustrialPickPlaceVLA()
+    rclpy.spin(node)
+    node.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
 ```
 
-## Best Practices for VLA Applications
+## Application 2: Household Assistant Robot
 
-<PersonalizationControls />
+Home robots must handle enormous task diversity — making coffee, loading dishwashers, folding laundry — that no hand-coded system could cover. VLA models excel here due to their generalization from internet-scale training.
 
-<div className="vla-applications-best-practices">
+```python
+#!/usr/bin/env python3
+"""
+Household assistant VLA application.
+Supports multi-step task execution with natural language instructions.
+"""
 
-1. **Domain Specialization**: Fine-tune models for specific applications
-2. **Safety First**: Implement comprehensive safety checks
-3. **Human-in-the-Loop**: Include human oversight for critical tasks
-4. **Continuous Learning**: Update models based on real-world performance
-5. **Robust Error Handling**: Gracefully handle failures and uncertainties
+import rclpy
+from rclpy.node import Node
+from dataclasses import dataclass
+from typing import Optional, List, Dict
+import numpy as np
+from enum import Enum
 
-</div>
 
-## Hardware vs Simulation Considerations
+class TaskStatus(Enum):
+    IDLE = "idle"
+    PLANNING = "planning"
+    EXECUTING = "executing"
+    SUCCESS = "success"
+    FAILED = "failed"
 
-Based on your preferences:
 
-- **For Simulation Focus**: Emphasize realistic physics and sensor modeling
-- **For Real Hardware**: Account for sensor noise, actuation delays, and environmental variations
-- **For Both**: Implement adaptive control strategies that work in both domains
+@dataclass
+class Task:
+    instruction: str
+    max_steps: int = 100
+    success_criteria: Optional[str] = None
 
-## Performance Evaluation
 
-### Metrics for VLA Applications
+class HouseholdAssistantVLA(Node):
+    """
+    VLA-powered household assistant with multi-step task planning.
 
-Different applications require different evaluation metrics:
+    Supports:
+    - Single step: "pick up the mug"
+    - Multi-step: "make me a coffee" → [find mug, fill with water, ...]
+    - Long-horizon: "tidy the kitchen" → [identify mess, sort objects, ...]
+    """
 
-1. **Task Completion Rate**: Percentage of tasks completed successfully
-2. **Execution Time**: Time taken to complete tasks
-3. **Accuracy**: Precision of movements and actions
-4. **Safety Score**: Number of safety violations
-5. **User Satisfaction**: Subjective rating from human users
+    def __init__(self):
+        super().__init__('household_assistant_vla')
+
+        from std_msgs.msg import String
+        from sensor_msgs.msg import Image
+
+        self.status = TaskStatus.IDLE
+        self.task_queue: List[Task] = []
+        self.current_task: Optional[Task] = None
+        self.step_count = 0
+
+        # Subscribers
+        self.create_subscription(
+            String, '/assistant/command', self.command_callback, 10
+        )
+        self.create_subscription(
+            Image, '/camera/image_raw', self.image_callback, 1
+        )
+
+        # Publishers
+        self.status_pub = self.create_publisher(String, '/assistant/status', 10)
+        self.speech_pub = self.create_publisher(String, '/assistant/speech', 10)
+        self.action_pub = self.create_publisher(
+            __import__('std_msgs.msg', fromlist=['Float64MultiArray']).Float64MultiArray,
+            '/arm/action', 10
+        )
+
+        # Complex task decomposer (uses LLM)
+        self.task_decomposer = LLMTaskDecomposer()
+
+        # Main execution timer
+        self.create_timer(0.1, self.execution_loop)
+
+        self.get_logger().info('Household Assistant VLA ready')
+        self._speak("Hello! I'm your household assistant. How can I help you?")
+
+    def command_callback(self, msg):
+        """Handle incoming voice/text command."""
+        command = msg.data.strip()
+        self.get_logger().info(f'Command received: "{command}"')
+
+        # Decompose into subtasks if needed
+        subtasks = self.task_decomposer.decompose(command)
+
+        if len(subtasks) == 1:
+            self.task_queue.append(Task(instruction=subtasks[0]))
+            self._speak(f"I'll {command}")
+        else:
+            for subtask in subtasks:
+                self.task_queue.append(Task(instruction=subtask))
+            steps_text = ", then ".join(subtasks[:3])
+            if len(subtasks) > 3:
+                steps_text += f", and {len(subtasks)-3} more steps"
+            self._speak(f"I'll complete this by: {steps_text}")
+
+    def image_callback(self, msg):
+        """Store latest image."""
+        from cv_bridge import CvBridge
+        from PIL import Image as PILImage
+        bridge = CvBridge()
+        cv_img = bridge.imgmsg_to_cv2(msg, desired_encoding='rgb8')
+        self.current_image = PILImage.fromarray(cv_img)
+
+    def execution_loop(self):
+        """Main task execution state machine."""
+        if self.status == TaskStatus.IDLE:
+            if self.task_queue:
+                self.current_task = self.task_queue.pop(0)
+                self.status = TaskStatus.EXECUTING
+                self.step_count = 0
+                self._speak(f"Now I'll {self.current_task.instruction}")
+                self._publish_status(f"Executing: {self.current_task.instruction}")
+
+        elif self.status == TaskStatus.EXECUTING:
+            if not hasattr(self, 'current_image'):
+                return
+
+            # Run VLA inference
+            # action = self.vla_model.predict(self.current_image, self.current_task.instruction)
+            # self._execute_action(action)
+
+            self.step_count += 1
+
+            # Check completion (gripper state, step limit, etc.)
+            if self.step_count >= self.current_task.max_steps:
+                self.status = TaskStatus.FAILED
+                self._speak(f"I couldn't complete: {self.current_task.instruction}")
+            elif self._check_task_complete():
+                self.status = TaskStatus.SUCCESS
+                self._speak(f"Done with: {self.current_task.instruction}")
+
+        elif self.status in (TaskStatus.SUCCESS, TaskStatus.FAILED):
+            # Reset and continue with next task
+            if self.task_queue:
+                self.status = TaskStatus.IDLE
+            else:
+                self.status = TaskStatus.IDLE
+                self._speak("All tasks complete. What else can I help with?")
+
+    def _check_task_complete(self) -> bool:
+        """Check if current task has been completed."""
+        # In a real system: use success classifiers or force sensing
+        return False  # Simplified
+
+    def _speak(self, text: str):
+        """Publish text for text-to-speech output."""
+        from std_msgs.msg import String
+        msg = String()
+        msg.data = text
+        self.speech_pub.publish(msg)
+        self.get_logger().info(f'[SPEECH] {text}')
+
+    def _publish_status(self, status: str):
+        from std_msgs.msg import String
+        msg = String()
+        msg.data = status
+        self.status_pub.publish(msg)
+
+
+class LLMTaskDecomposer:
+    """
+    Uses an LLM to decompose complex tasks into atomic robot actions.
+    For production, use GPT-4 or a local model via Ollama.
+    """
+
+    # Simple rule-based decomposition for offline demo
+    TASK_DECOMPOSITIONS = {
+        "make coffee": [
+            "pick up the coffee mug from the cabinet",
+            "place mug under coffee machine spout",
+            "press the brew button on the coffee machine",
+            "wait for coffee to fill",
+            "move mug to the table",
+        ],
+        "tidy the kitchen": [
+            "identify items on the counter that need to be put away",
+            "pick up the dishes and put them in the sink",
+            "wipe the counter surface with a cloth",
+            "put the cloth away in the drawer",
+        ],
+        "set the table": [
+            "pick up a plate from the cabinet",
+            "place plate on the table",
+            "pick up fork and knife from drawer",
+            "place fork and knife next to the plate",
+            "pick up a glass",
+            "place glass above the plate",
+        ]
+    }
+
+    def decompose(self, command: str) -> List[str]:
+        """Decompose command into atomic subtasks."""
+        command_lower = command.lower()
+
+        for key, tasks in self.TASK_DECOMPOSITIONS.items():
+            if key in command_lower:
+                return tasks
+
+        # Single atomic task (no decomposition needed)
+        return [command]
+```
+
+## Application 3: Collaborative Robot Quality Inspection
+
+VLA models can perform flexible quality control inspection based on natural language specification of defect criteria — eliminating the need to program specific defect patterns.
+
+```python
+#!/usr/bin/env python3
+"""
+VLA-powered quality inspection system.
+Inspects parts based on natural language quality criteria.
+"""
+
+import numpy as np
+import cv2
+from dataclasses import dataclass, field
+from typing import List, Tuple, Optional
+from datetime import datetime
+
+
+@dataclass
+class InspectionResult:
+    part_id: str
+    timestamp: str
+    instruction: str
+    passed: bool
+    confidence: float
+    defects_found: List[str]
+    action_sequence: List[np.ndarray]
+    image_path: Optional[str] = None
+
+
+class QualityInspectionVLA:
+    """
+    VLA-based quality inspection for manufacturing.
+
+    The robot arm positions a camera over the part,
+    then uses VLA to determine if quality criteria are met.
+    """
+
+    # Standard quality inspection prompts
+    INSPECTION_TEMPLATES = {
+        'surface': "Inspect the part surface for scratches, dents, or contamination. "
+                   "Move to areas that show defects.",
+        'edge': "Inspect the part edges for chips, burrs, or irregular geometry.",
+        'color': "Inspect the part color uniformity. Flag any discoloration or spots.",
+        'assembly': "Verify all components are correctly assembled and no parts are missing.",
+    }
+
+    def __init__(self, vla_model, arm_controller):
+        self.vla = vla_model
+        self.arm = arm_controller
+        self.results_log: List[InspectionResult] = []
+
+    def inspect_part(
+        self,
+        part_id: str,
+        inspection_type: str = 'surface',
+        custom_criteria: Optional[str] = None,
+    ) -> InspectionResult:
+        """
+        Perform VLA-guided quality inspection.
+
+        Args:
+            part_id: Unique part identifier
+            inspection_type: One of 'surface', 'edge', 'color', 'assembly'
+            custom_criteria: Optional custom inspection prompt
+
+        Returns:
+            InspectionResult with pass/fail determination
+        """
+        instruction = custom_criteria or self.INSPECTION_TEMPLATES.get(
+            inspection_type,
+            "Inspect this part for any visible defects."
+        )
+
+        self.arm.move_to_inspection_start_pose()
+
+        images = []
+        actions = []
+        defects = []
+
+        # VLA-guided inspection loop
+        for step in range(30):  # Max 30 inspection steps
+            image = self.arm.get_camera_image()
+            images.append(image)
+
+            # VLA predicts where to look next or signals completion
+            action = self.vla.predict_action(image, instruction)
+            actions.append(action)
+
+            # Check if model signals inspection complete (e.g., arm returns to start)
+            if self._is_inspection_complete(action, step):
+                break
+
+            # Apply action (move arm to new inspection viewpoint)
+            self.arm.apply_action(action)
+
+            # Run defect classifier on current image
+            defect = self._classify_defect(image, instruction)
+            if defect:
+                defects.append(defect)
+
+        # Determine overall pass/fail
+        passed = len(defects) == 0
+        confidence = self._calculate_confidence(images, actions)
+
+        result = InspectionResult(
+            part_id=part_id,
+            timestamp=datetime.now().isoformat(),
+            instruction=instruction,
+            passed=passed,
+            confidence=confidence,
+            defects_found=defects,
+            action_sequence=actions,
+        )
+
+        self.results_log.append(result)
+        return result
+
+    def _is_inspection_complete(self, action: np.ndarray, step: int) -> bool:
+        """Check if VLA model signals inspection is complete."""
+        # Heuristic: arm returning to near-start position
+        if step > 10:
+            position_magnitude = np.linalg.norm(action[:3])
+            return position_magnitude < 0.01  # Very small motion = stopped
+        return False
+
+    def _classify_defect(self, image: np.ndarray, criteria: str) -> Optional[str]:
+        """
+        Classify defects in current image.
+        In production: use a fine-tuned classifier for your specific defect types.
+        """
+        # Simplified color-based defect detection
+        if image is None:
+            return None
+
+        # Convert to grayscale for analysis
+        gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+
+        # Detect high-contrast regions (potential scratches/cracks)
+        edges = cv2.Canny(gray, 50, 150)
+        edge_density = edges.mean()
+
+        if edge_density > 20.0:  # Threshold calibrated for your parts
+            return f"High edge density ({edge_density:.1f}) - possible scratches"
+
+        return None
+
+    def _calculate_confidence(
+        self, images: list, actions: list
+    ) -> float:
+        """Calculate inspection confidence based on coverage and consistency."""
+        if len(images) < 5:
+            return 0.5  # Low confidence if few images captured
+
+        # More images = higher coverage = higher confidence
+        coverage_score = min(1.0, len(images) / 20.0)
+
+        # Consistent motion (not erratic) = higher confidence
+        if len(actions) > 1:
+            action_array = np.array([a[:3] for a in actions])
+            motion_variance = action_array.var(axis=0).mean()
+            consistency_score = max(0.0, 1.0 - motion_variance)
+        else:
+            consistency_score = 0.5
+
+        return (coverage_score + consistency_score) / 2.0
+
+    def generate_report(self) -> dict:
+        """Generate inspection statistics report."""
+        if not self.results_log:
+            return {'error': 'No inspections recorded'}
+
+        total = len(self.results_log)
+        passed = sum(1 for r in self.results_log if r.passed)
+        avg_confidence = np.mean([r.confidence for r in self.results_log])
+
+        defect_counts = {}
+        for result in self.results_log:
+            for defect in result.defects_found:
+                defect_type = defect.split(' - ')[1] if ' - ' in defect else defect
+                defect_counts[defect_type] = defect_counts.get(defect_type, 0) + 1
+
+        return {
+            'total_inspected': total,
+            'passed': passed,
+            'failed': total - passed,
+            'yield_rate': f"{100 * passed / total:.1f}%",
+            'average_confidence': f"{avg_confidence:.1%}",
+            'defect_types': defect_counts,
+            'timestamp': datetime.now().isoformat(),
+        }
+```
+
+## Application 4: Healthcare Rehabilitation Robot
+
+```python
+#!/usr/bin/env python3
+"""
+VLA-powered rehabilitation assistance robot.
+Guides patients through exercises with visual monitoring and feedback.
+"""
+
+import rclpy
+from rclpy.node import Node
+import numpy as np
+from dataclasses import dataclass
+from typing import List, Optional
+
+
+@dataclass
+class ExerciseSession:
+    patient_id: str
+    exercise_name: str
+    target_reps: int
+    completed_reps: int = 0
+    form_scores: List[float] = None
+
+    def __post_init__(self):
+        self.form_scores = []
+
+    @property
+    def average_form_score(self) -> float:
+        if not self.form_scores:
+            return 0.0
+        return np.mean(self.form_scores)
+
+
+class RehabilitationVLA(Node):
+    """
+    VLA-powered rehabilitation robot that:
+    1. Demonstrates exercises to patients
+    2. Monitors patient form using vision
+    3. Provides real-time verbal feedback
+    4. Adapts difficulty based on patient progress
+    """
+
+    EXERCISES = {
+        'shoulder_raise': {
+            'instruction': 'Guide the patient to raise their arms to shoulder height',
+            'feedback_instruction': 'Evaluate the patient\'s shoulder raise form. '
+                                    'Check if arms are at shoulder height and elbows are straight.',
+            'target_angle': 90,  # degrees
+            'duration': 10,      # seconds
+        },
+        'knee_extension': {
+            'instruction': 'Guide the patient to extend their knee from 90 to 180 degrees',
+            'feedback_instruction': 'Check if the patient\'s knee is fully extended '
+                                    'and they are maintaining proper posture.',
+            'target_angle': 180,
+            'duration': 8,
+        },
+        'grip_strength': {
+            'instruction': 'Ask the patient to squeeze the grip sensor as hard as possible',
+            'feedback_instruction': 'Monitor the patient\'s grip and encourage maximum effort.',
+            'target_angle': None,
+            'duration': 5,
+        }
+    }
+
+    def __init__(self):
+        super().__init__('rehabilitation_vla')
+
+        from std_msgs.msg import String, Float32
+        from sensor_msgs.msg import Image
+
+        self.current_session: Optional[ExerciseSession] = None
+
+        # Create subscriptions and publishers
+        self.create_subscription(String, '/rehab/start_exercise', self.start_exercise, 10)
+        self.create_subscription(Image, '/camera/image_raw', self.image_callback, 1)
+
+        self.feedback_pub = self.create_publisher(String, '/rehab/feedback', 10)
+        self.speech_pub = self.create_publisher(String, '/rehab/speech', 10)
+        self.score_pub = self.create_publisher(Float32, '/rehab/form_score', 10)
+
+        self.create_timer(0.5, self.monitor_and_feedback)
+
+        self.get_logger().info('Rehabilitation VLA node ready')
+        self._speak("Rehabilitation system ready. Please choose an exercise to begin.")
+
+    def start_exercise(self, msg):
+        """Start a rehabilitation exercise session."""
+        parts = msg.data.split(':')
+        patient_id = parts[0] if len(parts) > 1 else 'patient_001'
+        exercise_name = parts[-1].strip()
+
+        if exercise_name not in self.EXERCISES:
+            self._speak(f"Exercise '{exercise_name}' not found. "
+                       f"Available: {', '.join(self.EXERCISES.keys())}")
+            return
+
+        self.current_session = ExerciseSession(
+            patient_id=patient_id,
+            exercise_name=exercise_name,
+            target_reps=10
+        )
+
+        exercise = self.EXERCISES[exercise_name]
+        self._speak(f"Starting {exercise_name.replace('_', ' ')}. "
+                   f"We'll do {self.current_session.target_reps} repetitions. "
+                   f"Follow my guidance.")
+
+        self.get_logger().info(f"Exercise session started: {exercise_name}")
+
+    def image_callback(self, msg):
+        """Process camera image for pose estimation."""
+        from cv_bridge import CvBridge
+        from PIL import Image as PILImage
+        try:
+            bridge = CvBridge()
+            cv_img = bridge.imgmsg_to_cv2(msg, desired_encoding='rgb8')
+            self.current_image = PILImage.fromarray(cv_img)
+        except Exception as e:
+            self.get_logger().error(f'Image callback error: {e}')
+
+    def monitor_and_feedback(self):
+        """Monitor patient form and provide feedback."""
+        if self.current_session is None:
+            return
+
+        if not hasattr(self, 'current_image'):
+            return
+
+        exercise = self.EXERCISES[self.current_session.exercise_name]
+
+        # In real system: run VLA inference for form evaluation
+        # form_score = self.vla.evaluate_form(
+        #     self.current_image,
+        #     exercise['feedback_instruction']
+        # )
+
+        # Simulate form score for demonstration
+        form_score = np.random.uniform(0.6, 0.95)
+        self.current_session.form_scores.append(form_score)
+
+        # Publish form score
+        from std_msgs.msg import Float32
+        score_msg = Float32()
+        score_msg.data = float(form_score)
+        self.score_pub.publish(score_msg)
+
+        # Generate feedback based on score
+        feedback = self._generate_feedback(form_score, exercise)
+        self._publish_feedback(feedback)
+
+        # Check if rep is complete (simplified heuristic)
+        if len(self.current_session.form_scores) % 20 == 0:
+            self.current_session.completed_reps += 1
+            self._speak(f"Rep {self.current_session.completed_reps} complete! "
+                       f"Form score: {form_score:.0%}")
+
+            if self.current_session.completed_reps >= self.current_session.target_reps:
+                self._complete_session()
+
+    def _generate_feedback(self, form_score: float, exercise: dict) -> str:
+        """Generate verbal feedback based on form quality."""
+        if form_score >= 0.9:
+            return "Excellent form! Keep going!"
+        elif form_score >= 0.75:
+            return "Good form. Try to keep your back straight."
+        elif form_score >= 0.6:
+            return "Fair form. Slow down and focus on control."
+        else:
+            return "Please pause. Let me demonstrate the correct position."
+
+    def _complete_session(self):
+        """Handle session completion."""
+        session = self.current_session
+        avg_score = session.average_form_score
+
+        summary = (f"Exercise session complete! "
+                  f"You completed {session.completed_reps} reps "
+                  f"with an average form score of {avg_score:.0%}. "
+                  f"{'Outstanding work!' if avg_score > 0.8 else 'Keep practicing!'}")
+
+        self._speak(summary)
+        self.get_logger().info(f"Session complete: {summary}")
+        self.current_session = None
+
+    def _speak(self, text: str):
+        from std_msgs.msg import String
+        msg = String()
+        msg.data = text
+        self.speech_pub.publish(msg)
+        self.get_logger().info(f'[SPEECH] {text}')
+
+    def _publish_feedback(self, feedback: str):
+        from std_msgs.msg import String
+        msg = String()
+        msg.data = feedback
+        self.feedback_pub.publish(msg)
+
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = RehabilitationVLA()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
+```
+
+## Performance Evaluation Metrics
+
+Evaluating VLA applications requires task-specific and system-level metrics:
+
+```python
+import numpy as np
+from dataclasses import dataclass, field
+from typing import List, Dict
+import json
+
+
+@dataclass
+class VLAEvaluationMetrics:
+    """
+    Comprehensive metrics for VLA robot application evaluation.
+    """
+
+    # Task performance
+    task_completion_rate: float = 0.0    # Fraction of tasks completed [0,1]
+    step_efficiency: float = 0.0         # Completed / max steps ratio [0,1]
+    average_completion_time: float = 0.0 # Seconds per task
+
+    # Quality
+    success_by_instruction_type: Dict[str, float] = field(default_factory=dict)
+    generalization_score: float = 0.0    # Performance on unseen objects/environments
+    recovery_rate: float = 0.0           # Rate of recovering from near-failures
+
+    # Safety
+    collision_rate: float = 0.0          # Collisions per 100 tasks
+    human_safety_score: float = 1.0      # 1.0 = perfect safety
+    emergency_stops: int = 0
+
+    # User experience
+    user_satisfaction: float = 0.0       # Survey score [0, 10]
+    instruction_success_rate: float = 0.0  # % of natural language instructions understood
+
+    def compute_overall_score(self, weights: Dict[str, float] = None) -> float:
+        """Compute weighted overall performance score."""
+        if weights is None:
+            weights = {
+                'task_completion': 0.30,
+                'efficiency': 0.15,
+                'generalization': 0.20,
+                'safety': 0.25,
+                'user_experience': 0.10,
+            }
+
+        safety_score = (1.0 - self.collision_rate / 100) * self.human_safety_score
+
+        score = (
+            weights['task_completion'] * self.task_completion_rate +
+            weights['efficiency'] * self.step_efficiency +
+            weights['generalization'] * self.generalization_score +
+            weights['safety'] * safety_score +
+            weights['user_experience'] * (self.user_satisfaction / 10.0)
+        )
+        return score
+
+    def to_report(self) -> str:
+        """Generate human-readable evaluation report."""
+        return f"""
+VLA Application Evaluation Report
+==================================
+Task Performance:
+  Completion Rate:     {self.task_completion_rate:.1%}
+  Step Efficiency:     {self.step_efficiency:.1%}
+  Avg Completion Time: {self.average_completion_time:.1f}s
+
+Quality:
+  Generalization:      {self.generalization_score:.1%}
+  Recovery Rate:       {self.recovery_rate:.1%}
+
+Safety:
+  Collision Rate:      {self.collision_rate:.2f} per 100 tasks
+  Emergency Stops:     {self.emergency_stops}
+
+User Experience:
+  Satisfaction:        {self.user_satisfaction:.1f}/10
+  Instruction Success: {self.instruction_success_rate:.1%}
+
+Overall Score:         {self.compute_overall_score():.1%}
+"""
+```
 
 ## Future Directions
 
-VLA models are rapidly evolving with promising directions:
+### Trends in VLA Applications (2025 and Beyond)
 
-- **Multi-agent Collaboration**: Multiple robots working together
-- **Long-term Memory**: Remembering past interactions and learning
-- **Adaptive Interfaces**: Adjusting to different users and environments
-- **Cross-domain Transfer**: Applying knowledge across different domains
+```mermaid
+graph TB
+    subgraph "Current State (2024)"
+        C1[Single robot arm<br/>manipulation tasks]
+        C2[Structured environments]
+        C3[Fixed camera viewpoints]
+    end
 
-## Next Steps
+    subgraph "Near Future (2025-2026)"
+        N1[Humanoid whole-body<br/>loco-manipulation]
+        N2[Unstructured real-world<br/>deployment]
+        N3[Multi-camera, multi-sensor]
+        N4[Real-time on Jetson AGX Orin]
+    end
 
-Continue learning about capstone projects that integrate all the concepts covered in this book in the next section.
+    subgraph "Long Term (2027+)"
+        L1[Fleet coordination<br/>multi-robot collaboration]
+        L2[Lifelong learning<br/>from deployment data]
+        L3[Cross-embodiment transfer<br/>one model, all robots]
+    end
+
+    C1 --> N1
+    C2 --> N2
+    C3 --> N3
+    N1 --> L1
+    N2 --> L2
+    N3 --> L3
+```
+
+**Key research directions:**
+
+1. **Whole-body control**: Extending VLA models to control all joints of a humanoid — legs, arms, torso, and head simultaneously
+2. **Long-horizon tasks**: Planning and executing 10-minute tasks with hundreds of steps
+3. **Real-time efficiency**: Distilling 7B+ models to sub-100M models that run at 50+ Hz on embedded hardware
+4. **Safety guarantees**: Formal safety constraints integrated into the action generation process
+
+The capstone projects in the next section will give you hands-on experience deploying VLA models in complete, integrated robotic systems.

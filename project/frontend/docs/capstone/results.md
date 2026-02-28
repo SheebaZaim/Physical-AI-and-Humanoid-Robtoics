@@ -2,564 +2,763 @@
 sidebar_position: 3
 ---
 
-# Capstone Project Results
+# Evaluating and Presenting Robotics Project Results
 
-## Overview
+Rigorous evaluation is what separates a research-grade project from a demo. This chapter provides complete frameworks for measuring, benchmarking, and presenting your robotics project results in a way that is reproducible, honest, and compelling.
 
-This chapter presents the results and outcomes of implementing the capstone projects introduced in this book. We'll examine the performance, lessons learned, and potential improvements for each project.
+## Why Evaluation Matters
 
-<DiagramContainer title="Capstone Project Evaluation Framework" caption="Framework for evaluating capstone project outcomes">
-  ```mermaid
-  graph TD
-      A[Capstone Projects] --> B[Performance Metrics]
-      A --> C[Lessons Learned]
-      A --> D[Improvement Opportunities]
-      A --> E[Real-World Impact]
+In robotics, it is easy to cherry-pick successful runs and present them as typical performance. Proper evaluation:
+- Establishes **reproducible baselines** that others can compare against
+- Reveals **failure modes** that guide future improvements
+- Provides **honest confidence intervals** rather than best-case numbers
+- Demonstrates **statistical rigor** required for academic publication
 
-      B --> B1[Task Completion Rate]
-      B --> B2[Execution Time]
-      B --> B3[Accuracy]
-      B --> B4[Safety Score]
+## Evaluation Framework Overview
 
-      C --> C1[Technical Challenges]
-      C --> C2[Integration Issues]
-      C --> C3[Unexpected Insights]
+```mermaid
+graph TB
+    subgraph "Evaluation Process"
+        Design[Evaluation Design<br/>What to measure?<br/>How many trials?]
+        Metrics[Metric Selection<br/>Task-specific KPIs]
+        Baseline[Baseline Comparison<br/>Rule-based vs VLA<br/>Zero-shot vs fine-tuned]
+        Execution[Trial Execution<br/>Controlled conditions<br/>Independent trials]
+        Analysis[Statistical Analysis<br/>Mean, std, CI<br/>Significance tests]
+        Viz[Visualization<br/>Plots, tables, video]
+        Report[Report<br/>Academic or industry format]
+    end
 
-      D --> D1[Algorithm Improvements]
-      D --> D2[System Optimizations]
-      D --> D3[User Experience Enhancements]
-
-      E --> E1[Industry Applications]
-      E --> E2[Research Contributions]
-      E --> E3[Commercial Potential]
-  ```
-</DiagramContainer>
-
-## Project 1: Autonomous Warehouse Assistant Results
-
-### Performance Metrics
-
-After implementing and testing the Autonomous Warehouse Assistant, we measured several key performance metrics:
-
-#### Task Completion Rate
-- **Overall Completion Rate**: 87%
-- **Navigation Success Rate**: 92%
-- **Manipulation Success Rate**: 83%
-- **Voice Command Understanding Rate**: 89%
-
-#### Execution Time
-- **Average Task Completion Time**: 3.2 minutes
-- **Navigation Time**: 1.8 minutes per task
-- **Manipulation Time**: 1.4 minutes per task
-- **Communication Overhead**: 0.2 minutes per task
-
-#### Accuracy Metrics
-- **Object Identification Accuracy**: 94%
-- **Pose Estimation Accuracy**: 91%
-- **Path Planning Accuracy**: 96%
-- **Manipulation Accuracy**: 88%
-
-#### Safety Performance
-- **Safety Violations**: 0 (perfect safety record)
-- **Emergency Stops**: 2 per 100 tasks (safety precautions)
-- **Collision Avoidance Success**: 99.8%
-
-### Detailed Analysis
-
-#### Strengths
-1. **Robust Navigation**: The system showed excellent performance in navigating complex warehouse environments with dynamic obstacles.
-2. **Accurate Object Recognition**: The vision system reliably identified and located objects with high precision.
-3. **Effective Task Planning**: The task planner successfully coordinated complex sequences of navigation and manipulation.
-4. **Good Voice Command Understanding**: Natural language processing worked well for common warehouse commands.
-
-#### Challenges Encountered
-1. **Lighting Conditions**: Performance degraded in poor lighting conditions, requiring additional illumination in some areas.
-2. **Small Object Handling**: Grasping very small objects proved challenging, requiring gripper modifications.
-3. **Dynamic Obstacle Response**: The system sometimes paused unnecessarily when people walked nearby.
-4. **Complex Command Interpretation**: Multi-step commands with complex spatial relationships were difficult to parse.
-
-#### Lessons Learned
-
-<PersonalizationControls />
-
-<div className="lessons-learned">
-
-1. **Modularity is Critical**: The modular architecture allowed us to improve individual components without affecting the entire system.
-
-2. **Simulation-to-Reality Gap**: Significant differences existed between simulation and real-world performance, highlighting the importance of real-world testing.
-
-3. **Human-Robot Interaction**: The success of voice commands depended heavily on clear communication protocols between humans and the robot.
-
-4. **Safety Over Performance**: Prioritizing safety over speed resulted in a more reliable system that operators trusted.
-
-</div>
-
-### Improvements Implemented
-
-Based on initial testing, we implemented several improvements:
-
-#### Vision System Enhancements
-```python
-class EnhancedVisionSystem:
-    def __init__(self):
-        # Multi-scale object detection
-        self.detector = MultiScaleDetector()
-
-        # Lighting invariant preprocessing
-        self.lighting_compensator = LightingCompensator()
-
-        # Temporal consistency checker
-        self.temporal_filter = TemporalFilter(window_size=5)
-
-    def detect_objects_robust(self, image):
-        """Enhanced object detection with lighting compensation"""
-        # Compensate for lighting
-        compensated_image = self.lighting_compensator.process(image)
-
-        # Multi-scale detection
-        detections = self.detector.detect_multiscale(compensated_image)
-
-        # Apply temporal filtering for consistency
-        filtered_detections = self.temporal_filter.filter(detections)
-
-        return filtered_detections
+    Design --> Metrics --> Baseline --> Execution --> Analysis --> Viz --> Report
 ```
 
-#### Adaptive Navigation
-```python
-class AdaptiveNavigationSystem:
-    def __init__(self):
-        self.obstacle_predictor = ObstaclePredictor()
-        self.dynamic_planner = DynamicPathPlanner()
-        self.learning_module = BehaviorLearningModule()
+## Metrics by Project Type
 
-    def plan_adaptive_path(self, goal, current_obstacles, predicted_movements):
-        """Plan path considering predicted obstacle movements"""
-        # Predict where obstacles will be
-        future_obstacles = self.obstacle_predictor.predict(
-            current_obstacles,
-            predicted_movements,
-            time_horizon=5.0  # 5 seconds ahead
-        )
-
-        # Plan path with future obstacles in mind
-        path = self.dynamic_planner.plan_path(
-            start=self.current_pose,
-            goal=goal,
-            obstacles=future_obstacles
-        )
-
-        # Learn from execution results
-        self.learning_module.update_from_experience(path, goal)
-
-        return path
-```
-
-## Project 2: Home Assistant Robot Results
-
-### Performance Metrics
-
-#### Task Completion Rate
-- **Simple Task Completion**: 91%
-- **Complex Task Completion**: 76%
-- **Daily Routine Completion**: 84%
-- **Emergency Response Success**: 95%
-
-#### Interaction Quality
-- **Voice Command Understanding**: 88%
-- **Gesture Recognition Accuracy**: 82%
-- **Social Engagement Score**: 7.2/10
-- **User Satisfaction**: 8.1/10
-
-#### Safety and Reliability
-- **Safety Incidents**: 0
-- **System Failures**: 3 per 1000 hours
-- **Recovery Success Rate**: 94%
-- **Battery Management**: 98% successful charging cycles
-
-### User Experience Results
-
-#### User Feedback
-- **Ease of Use**: 8.3/10
-- **Helpfulness**: 8.7/10
-- **Reliability**: 7.9/10
-- **Privacy Comfort**: 8.5/10
-
-#### Behavioral Observations
-1. **Routine Adoption**: Users quickly adopted regular interaction patterns
-2. **Trust Building**: Trust increased significantly after 2 weeks of use
-3. **Customization Needs**: Users wanted to customize robot behavior
-4. **Social Acceptance**: Family members became comfortable with the robot over time
-
-### Technical Achievements
-
-#### Natural Language Understanding
-The system achieved impressive results in understanding natural commands:
+### Navigation Projects
 
 ```python
-class AdvancedNLU:
-    def __init__(self):
-        self.intent_classifier = IntentClassifier()
-        self.entity_extractor = EntityExtractor()
-        self.context_manager = ContextManager()
-        self.dialogue_policy = DialoguePolicy()
+#!/usr/bin/env python3
+"""
+Navigation evaluation framework.
+Measures task completion, path quality, and safety.
+"""
 
-    def process_command(self, text, context):
-        """Process natural language command with context awareness"""
-        # Classify intent
-        intent = self.intent_classifier.classify(text)
+import numpy as np
+import math
+from dataclasses import dataclass, field
+from typing import List, Tuple, Optional
 
-        # Extract entities
-        entities = self.entity_extractor.extract(text)
 
-        # Consider context
-        contextual_entities = self.context_manager.disambiguate(
-            entities,
-            context
+@dataclass
+class NavigationTrial:
+    """Data from a single navigation trial."""
+    trial_id: int
+    start_pose: Tuple[float, float, float]     # (x, y, theta)
+    goal_pose: Tuple[float, float, float]       # (x, y, theta)
+    actual_path: List[Tuple[float, float]]      # List of (x,y) waypoints
+    obstacle_positions: List[Tuple[float, float]]
+
+    # Outcomes
+    reached_goal: bool = False
+    final_pose: Optional[Tuple[float, float, float]] = None
+    completion_time_s: float = float('inf')
+    collisions: int = 0
+    emergency_stops: int = 0
+    distance_traveled: float = 0.0
+
+    @property
+    def path_length(self) -> float:
+        """Total distance traveled along actual path."""
+        if len(self.actual_path) < 2:
+            return 0.0
+        total = 0.0
+        for i in range(1, len(self.actual_path)):
+            dx = self.actual_path[i][0] - self.actual_path[i-1][0]
+            dy = self.actual_path[i][1] - self.actual_path[i-1][1]
+            total += math.sqrt(dx**2 + dy**2)
+        return total
+
+    @property
+    def optimal_path_length(self) -> float:
+        """Straight-line distance from start to goal."""
+        dx = self.goal_pose[0] - self.start_pose[0]
+        dy = self.goal_pose[1] - self.start_pose[1]
+        return math.sqrt(dx**2 + dy**2)
+
+    @property
+    def path_efficiency(self) -> float:
+        """Ratio of optimal to actual path length (1.0 = perfect straight line)."""
+        if self.path_length == 0:
+            return 0.0
+        return self.optimal_path_length / self.path_length
+
+    @property
+    def goal_error(self) -> float:
+        """Distance between intended and actual final position."""
+        if self.final_pose is None:
+            return float('inf')
+        dx = self.final_pose[0] - self.goal_pose[0]
+        dy = self.final_pose[1] - self.goal_pose[1]
+        return math.sqrt(dx**2 + dy**2)
+
+
+class NavigationEvaluator:
+    """Computes aggregate navigation performance metrics."""
+
+    def __init__(self, trials: List[NavigationTrial]):
+        self.trials = trials
+        self.n = len(trials)
+
+    def success_rate(self, goal_tolerance_m: float = 0.1) -> float:
+        """Fraction of trials where robot reached goal within tolerance."""
+        successes = sum(
+            1 for t in self.trials
+            if t.reached_goal and t.goal_error <= goal_tolerance_m
         )
+        return successes / self.n if self.n > 0 else 0.0
 
-        # Generate response based on dialogue policy
-        action = self.dialogue_policy.select_action(
-            intent,
-            contextual_entities,
-            context
-        )
+    def mean_completion_time(self) -> Tuple[float, float]:
+        """Mean and std of completion time for successful trials."""
+        times = [t.completion_time_s for t in self.trials if t.reached_goal]
+        if not times:
+            return float('inf'), 0.0
+        return float(np.mean(times)), float(np.std(times))
 
-        return action
-```
+    def mean_path_efficiency(self) -> Tuple[float, float]:
+        """Mean and std of path efficiency for successful trials."""
+        efficiencies = [t.path_efficiency for t in self.trials if t.reached_goal]
+        if not efficiencies:
+            return 0.0, 0.0
+        return float(np.mean(efficiencies)), float(np.std(efficiencies))
 
-#### Adaptive Behavior Learning
-```python
-class BehaviorLearningModule:
-    def __init__(self):
-        self.preference_learner = PreferenceLearner()
-        self.schedule_optimizer = ScheduleOptimizer()
-        self.social_model = SocialModel()
+    def collision_rate(self) -> float:
+        """Collisions per trial."""
+        return sum(t.collisions for t in self.trials) / self.n if self.n > 0 else 0.0
 
-    def update_behavior(self, user_interactions, outcomes):
-        """Update robot behavior based on user interactions"""
-        # Learn user preferences
-        preferences = self.preference_learner.analyze(user_interactions)
-
-        # Optimize daily schedule
-        optimal_schedule = self.schedule_optimizer.calculate(
-            preferences,
-            historical_data=outcomes
-        )
-
-        # Update social interaction patterns
-        social_updates = self.social_model.adapt(
-            user_responses=user_interactions.responses,
-            engagement_levels=user_interactions.engagement
-        )
+    def summary(self) -> dict:
+        """Full summary of navigation performance."""
+        sr = self.success_rate()
+        mean_time, std_time = self.mean_completion_time()
+        mean_eff, std_eff = self.mean_path_efficiency()
 
         return {
-            'preferences': preferences,
-            'schedule': optimal_schedule,
-            'social_behavior': social_updates
+            'trials': self.n,
+            'success_rate': f'{sr:.1%}',
+            'mean_completion_time_s': f'{mean_time:.1f} ± {std_time:.1f}',
+            'mean_path_efficiency': f'{mean_eff:.1%} ± {std_eff:.1%}',
+            'collision_rate': f'{self.collision_rate():.3f} per trial',
+            'mean_goal_error_m': f'{np.mean([t.goal_error for t in self.trials if t.reached_goal]):.3f}',
         }
+
+    def print_summary(self):
+        """Print formatted evaluation summary."""
+        summary = self.summary()
+        print("\n" + "="*50)
+        print("NAVIGATION EVALUATION SUMMARY")
+        print("="*50)
+        for key, value in summary.items():
+            print(f"  {key:<35} {value}")
+        print("="*50 + "\n")
 ```
 
-## Project 3: Healthcare Companion Robot Results
+### Manipulation Projects
 
-### Clinical Metrics
-
-#### Health Monitoring Accuracy
-- **Activity Tracking Accuracy**: 93%
-- **Posture Analysis Accuracy**: 89%
-- **Fall Detection Sensitivity**: 96%
-- **Medication Reminder Compliance**: 87%
-
-#### Wellbeing Indicators
-- **Social Engagement Increase**: 23%
-- **Physical Activity Increase**: 18%
-- **Mood Improvement**: 15% (measured through interaction analysis)
-- **Independence Maintenance**: 91%
-
-### Safety and Compliance Results
-
-#### Regulatory Compliance
-- **HIPAA Compliance**: 100% (no privacy breaches)
-- **Medical Device Standards**: Met all relevant standards
-- **Safety Protocols**: Perfect adherence
-- **Emergency Response**: 100% successful in tests
-
-#### User Acceptance
-- **Comfort Level**: 8.4/10
-- **Trust Level**: 7.9/10
-- **Willingness to Continue**: 92%
-- **Family Approval**: 88%
-
-### Therapeutic Outcomes
-
-#### Measured Benefits
-1. **Reduced Loneliness**: Significant decrease in reported loneliness scores
-2. **Increased Activity**: 18% increase in daily physical activity
-3. **Better Medication Adherence**: 87% compliance vs. 65% baseline
-4. **Improved Sleep Patterns**: Better sleep quality reported
-
-#### Qualitative Feedback
-- **Patients**: "Feels like having a friend around"
-- **Caregivers**: "Reduces our workload significantly"
-- **Family Members**: "Gives us peace of mind"
-- **Healthcare Providers**: "Provides valuable monitoring data"
-
-## Cross-Project Analysis
-
-### Common Success Factors
-
-<DiagramContainer title="Success Factors Across Projects" caption="Key factors that contributed to success across all capstone projects">
-  ```mermaid
-  graph TB
-      A[Success Factors] --> B[Robust Perception]
-      A --> C[Safe Navigation]
-      A --> D[Human-Centered Design]
-      A --> E[Adaptive Learning]
-      A --> F[Modular Architecture]
-
-      B --> B1[Accurate Object Detection]
-      B --> B2[Reliable Pose Estimation]
-      B --> B3[Environmental Understanding]
-
-      C --> C1[Collision Avoidance]
-      C --> C2[Path Planning]
-      C --> C3[Dynamic Obstacle Handling]
-
-      D --> D1[Usable Interfaces]
-      D --> D2[Appropriate Responses]
-      D --> D3[Privacy Protection]
-
-      E --> E1[Behavior Adaptation]
-      E --> E2[Preference Learning]
-      E --> E3[Performance Optimization]
-
-      F --> F1[Component Independence]
-      F --> F2[Easy Testing]
-      F --> F3[Rapid Iteration]
-  ```
-</DiagramContainer>
-
-### Technology Integration Results
-
-#### ROS 2 Integration
-- **Communication Reliability**: 99.2%
-- **Message Latency**: Average 45ms
-- **System Scalability**: Successfully scaled to 15+ nodes
-- **Fault Tolerance**: 98% system uptime
-
-#### Gazebo Simulation Results
-- **Physics Accuracy**: 94% correlation with real hardware
-- **Sensor Simulation**: 89% realistic behavior
-- **Development Speed**: 60% faster than real-robot development
-- **Cost Savings**: 75% reduction in development costs
-
-#### NVIDIA Isaac Platform Results
-- **Perception Performance**: 23% improvement over baseline
-- **Integration Ease**: 40% faster development
-- **Simulation Quality**: High-fidelity results
-- **Deployment Success**: 89% success rate
-
-#### VLA Model Integration Results
-- **Command Understanding**: 87% accuracy
-- **Task Execution**: 82% success rate
-- **Adaptability**: 78% improvement over static systems
-- **User Satisfaction**: 8.1/10 average rating
-
-## Performance Optimization Results
-
-### Computational Efficiency
-
-#### Real-Time Performance
 ```python
-class PerformanceOptimizer:
-    def __init__(self):
-        self.computation_scheduler = ComputationScheduler()
-        self.resource_allocator = ResourceAllocator()
-        self.performance_monitor = PerformanceMonitor()
+#!/usr/bin/env python3
+"""
+Manipulation evaluation framework.
+Measures grasp success, cycle time, and precision.
+"""
 
-    def optimize_realtime_processing(self, tasks):
-        """Optimize task scheduling for real-time performance"""
-        # Prioritize critical tasks
-        critical_tasks = [t for t in tasks if t.critical]
-        regular_tasks = [t for t in tasks if not t.critical]
+import numpy as np
+from dataclasses import dataclass, field
+from typing import List, Optional, Dict
+import json
+from pathlib import Path
 
-        # Schedule with priority
-        schedule = self.computation_scheduler.create_schedule(
-            critical_tasks=critical_tasks,
-            regular_tasks=regular_tasks,
-            deadline_constraints=self.get_deadlines()
-        )
 
-        # Allocate resources optimally
-        resource_alloc = self.resource_allocator.allocate(
-            schedule=schedule,
-            available_resources=self.get_available_resources()
-        )
+@dataclass
+class ManipulationTrial:
+    """Data from a single pick-and-place trial."""
+    trial_id: int
+    object_name: str
+    object_category: str    # 'seen' or 'unseen' (for generalization eval)
+    initial_object_pose: np.ndarray  # 6D pose
+    target_placement_pose: np.ndarray
 
-        return schedule, resource_alloc
+    # Outcomes
+    grasp_attempted: bool = False
+    grasp_success: bool = False
+    placement_success: bool = False
+    task_complete: bool = False
+    completion_time_s: float = float('inf')
+    num_attempts: int = 0
+    failure_mode: str = ""
 
-    def get_performance_metrics(self):
-        """Get current performance metrics"""
+    # Precision metrics
+    grasp_pose_error_m: float = float('inf')    # Error from intended grasp
+    placement_error_m: float = float('inf')      # Distance from target placement
+
+
+class ManipulationEvaluator:
+    """Comprehensive manipulation performance evaluator."""
+
+    def __init__(self, trials: List[ManipulationTrial]):
+        self.trials = trials
+
+    def grasp_success_rate(self, category: Optional[str] = None) -> Dict:
+        """
+        Grasp success rate, optionally filtered by object category.
+
+        Returns dict with rate and 95% confidence interval.
+        """
+        filtered = self.trials
+        if category:
+            filtered = [t for t in self.trials if t.object_category == category]
+
+        n = len(filtered)
+        if n == 0:
+            return {'rate': 0.0, 'ci_95': (0.0, 0.0), 'n': 0}
+
+        successes = sum(1 for t in filtered if t.grasp_success)
+        rate = successes / n
+
+        # Wilson score confidence interval for proportions
+        ci = self._wilson_ci(successes, n, confidence=0.95)
+
         return {
-            'cpu_usage': self.performance_monitor.get_cpu_usage(),
-            'memory_usage': self.performance_monitor.get_memory_usage(),
-            'task_latency': self.performance_monitor.get_average_latency(),
-            'throughput': self.performance_monitor.get_throughput()
+            'rate': rate,
+            'ci_95': ci,
+            'n': n,
+            'formatted': f'{rate:.1%} (95% CI: {ci[0]:.1%} - {ci[1]:.1%}, n={n})'
         }
+
+    def task_completion_rate(self) -> float:
+        """Fraction of trials where full task completed (grasp + place)."""
+        return sum(1 for t in self.trials if t.task_complete) / len(self.trials)
+
+    def failure_mode_analysis(self) -> Dict[str, int]:
+        """Count occurrences of each failure mode."""
+        failures = {}
+        for trial in self.trials:
+            if not trial.task_complete and trial.failure_mode:
+                failures[trial.failure_mode] = failures.get(trial.failure_mode, 0) + 1
+        return dict(sorted(failures.items(), key=lambda x: -x[1]))
+
+    def generalization_gap(self) -> Optional[float]:
+        """
+        Performance gap between seen and unseen objects.
+        Positive = better on seen objects (expected behavior).
+        """
+        seen_result = self.grasp_success_rate('seen')
+        unseen_result = self.grasp_success_rate('unseen')
+
+        if seen_result['n'] == 0 or unseen_result['n'] == 0:
+            return None
+
+        return seen_result['rate'] - unseen_result['rate']
+
+    def _wilson_ci(self, successes: int, n: int, confidence: float) -> tuple:
+        """Wilson score confidence interval for a proportion."""
+        from scipy import stats
+        z = stats.norm.ppf(1 - (1 - confidence) / 2)
+        p_hat = successes / n
+
+        center = (p_hat + z**2 / (2*n)) / (1 + z**2 / n)
+        margin = z * np.sqrt(p_hat*(1-p_hat)/n + z**2/(4*n**2)) / (1 + z**2/n)
+
+        return (max(0.0, center - margin), min(1.0, center + margin))
+
+    def print_report(self):
+        """Print comprehensive manipulation evaluation report."""
+        print("\n" + "="*60)
+        print("MANIPULATION EVALUATION REPORT")
+        print("="*60)
+
+        print(f"\nTotal trials: {len(self.trials)}")
+
+        # Overall performance
+        print("\n--- Grasp Success ---")
+        overall = self.grasp_success_rate()
+        print(f"  Overall: {overall['formatted']}")
+
+        seen = self.grasp_success_rate('seen')
+        if seen['n'] > 0:
+            print(f"  Seen objects: {seen['formatted']}")
+
+        unseen = self.grasp_success_rate('unseen')
+        if unseen['n'] > 0:
+            print(f"  Unseen objects: {unseen['formatted']}")
+
+        gap = self.generalization_gap()
+        if gap is not None:
+            print(f"  Generalization gap: {gap:.1%}")
+
+        # Task completion
+        print(f"\n--- Task Completion ---")
+        print(f"  Complete task: {self.task_completion_rate():.1%}")
+
+        # Failure modes
+        print("\n--- Failure Mode Analysis ---")
+        failure_modes = self.failure_mode_analysis()
+        for mode, count in failure_modes.items():
+            print(f"  {mode}: {count} occurrences")
+
+        print("="*60 + "\n")
 ```
 
-#### Results Achieved
-- **CPU Usage**: Reduced by 23% through optimization
-- **Memory Efficiency**: Improved by 31%
-- **Task Latency**: Reduced average latency by 45%
-- **Throughput**: Increased by 38%
+## Statistical Analysis
 
-## Economic and Practical Impact
+Proper statistical analysis is essential for credible results:
 
-### Cost-Benefit Analysis
+```python
+#!/usr/bin/env python3
+"""
+Statistical analysis tools for robotics experiments.
+"""
 
-#### Development Costs vs. Benefits
-- **Initial Development Cost**: $2.3M across all projects
-- **Annual Operating Cost**: $45K per system
-- **Productivity Gain**: $180K per system annually
-- **ROI Timeline**: 14 months for break-even
+import numpy as np
+from scipy import stats
+from typing import List, Tuple, Optional
+import warnings
 
-#### Market Potential
-- **Warehouse Automation**: $12B market, growing 15% annually
-- **Home Assistance**: $8B market, growing 22% annually
-- **Healthcare Robotics**: $6B market, growing 18% annually
 
-### Industry Adoption Results
+def bootstrap_confidence_interval(
+    data: List[float],
+    statistic=np.mean,
+    n_bootstrap: int = 10000,
+    confidence: float = 0.95,
+) -> Tuple[float, float, float]:
+    """
+    Bootstrap confidence interval for any statistic.
 
-#### Pilot Program Outcomes
-1. **Warehouse Pilot**: 23% productivity increase, 15% cost reduction
-2. **Home Care Pilot**: 34% caregiver burden reduction, 28% patient satisfaction increase
-3. **Healthcare Pilot**: 19% staff efficiency gain, 26% patient monitoring improvement
+    Args:
+        data: Observed data values
+        statistic: Function to compute (mean, median, etc.)
+        n_bootstrap: Number of bootstrap samples
+        confidence: Confidence level (0.95 = 95% CI)
 
-#### Scalability Assessment
-- **System Replication**: Successfully replicated 47 systems
-- **Customization**: 89% of deployments required minor customizations
-- **Support Requirements**: 0.2 FTE support per 10 systems
-- **Maintenance**: 96% uptime with preventive maintenance
+    Returns:
+        (statistic_value, lower_bound, upper_bound)
+    """
+    data_array = np.array(data)
+    n = len(data_array)
 
-## Future Development Roadmap
+    # Bootstrap sampling
+    bootstrap_stats = np.array([
+        statistic(np.random.choice(data_array, size=n, replace=True))
+        for _ in range(n_bootstrap)
+    ])
 
-### Technology Evolution
+    alpha = 1 - confidence
+    lower = np.percentile(bootstrap_stats, 100 * alpha / 2)
+    upper = np.percentile(bootstrap_stats, 100 * (1 - alpha / 2))
+    observed = statistic(data_array)
 
-#### Short-term Goals (1-2 years)
-1. **Enhanced Perception**: Improved object recognition and scene understanding
-2. **Better Human Interaction**: More natural and intuitive interfaces
-3. **Increased Autonomy**: More complex task execution with minimal supervision
-4. **Cloud Integration**: Remote monitoring and advanced analytics
+    return observed, lower, upper
 
-#### Medium-term Goals (3-5 years)
-1. **Swarm Coordination**: Multiple robots working together
-2. **Advanced Learning**: Deep learning for task adaptation
-3. **Extended Capabilities**: New task domains and environments
-4. **Regulatory Compliance**: Expanded certifications for sensitive applications
 
-#### Long-term Goals (5+ years)
-1. **General Intelligence**: Human-level task understanding and execution
-2. **Full Autonomy**: Independent operation in complex environments
-3. **Emotional Intelligence**: Understanding and responding to human emotions
-4. **Universal Compatibility**: Seamless integration with any system
+def compare_conditions(
+    condition_a: List[float],
+    condition_b: List[float],
+    condition_a_name: str = "Condition A",
+    condition_b_name: str = "Condition B",
+    alpha: float = 0.05,
+) -> dict:
+    """
+    Compare two experimental conditions with appropriate statistical tests.
 
-### Research Contributions
+    Uses Mann-Whitney U test (non-parametric) for robustness.
+    Also computes effect size (Cohen's d).
+    """
+    a = np.array(condition_a)
+    b = np.array(condition_b)
 
-#### Academic Impact
-- **Publications**: 23 peer-reviewed papers published
-- **Citations**: 456 citations across all publications
-- **Student Training**: 67 students trained on these systems
-- **Collaborations**: 12 industry partnerships established
+    # Descriptive statistics
+    a_mean, a_lower, a_upper = bootstrap_confidence_interval(list(a))
+    b_mean, b_lower, b_upper = bootstrap_confidence_interval(list(b))
 
-#### Open Source Contributions
-- **Software Libraries**: 8 open-source libraries released
-- **Dataset Publication**: 3 benchmark datasets published
-- **Tutorials**: 15 educational tutorials created
-- **Community**: Active community of 1,200+ developers
+    # Mann-Whitney U test (non-parametric, doesn't assume normality)
+    u_stat, p_value = stats.mannwhitneyu(a, b, alternative='two-sided')
 
-## Lessons Learned and Best Practices
+    # Effect size (Cohen's d)
+    pooled_std = np.sqrt((np.std(a)**2 + np.std(b)**2) / 2)
+    cohens_d = (np.mean(a) - np.mean(b)) / pooled_std if pooled_std > 0 else 0
 
-### Technical Best Practices
+    # Effect size interpretation
+    if abs(cohens_d) < 0.2:
+        effect_interpretation = "negligible"
+    elif abs(cohens_d) < 0.5:
+        effect_interpretation = "small"
+    elif abs(cohens_d) < 0.8:
+        effect_interpretation = "medium"
+    else:
+        effect_interpretation = "large"
 
-<PersonalizationControls />
+    return {
+        condition_a_name: {
+            'mean': a_mean,
+            'ci_95': (a_lower, a_upper),
+            'n': len(a),
+            'formatted': f'{a_mean:.3f} (95% CI: {a_lower:.3f}-{a_upper:.3f})'
+        },
+        condition_b_name: {
+            'mean': b_mean,
+            'ci_95': (b_lower, b_upper),
+            'n': len(b),
+            'formatted': f'{b_mean:.3f} (95% CI: {b_lower:.3f}-{b_upper:.3f})'
+        },
+        'p_value': p_value,
+        'significant': p_value < alpha,
+        'cohens_d': cohens_d,
+        'effect_size': effect_interpretation,
+        'interpretation': (
+            f"The difference is {'statistically significant' if p_value < alpha else 'not statistically significant'} "
+            f"(p={p_value:.4f}, α={alpha}), with a {effect_interpretation} effect size (d={cohens_d:.2f})."
+        )
+    }
 
-<div className="technical-best-practices">
 
-1. **Start Simple**: Begin with basic functionality and add complexity gradually
-2. **Modular Design**: Keep components loosely coupled for easy maintenance
-3. **Extensive Testing**: Test in simulation before real-world deployment
-4. **Safety First**: Implement multiple safety layers and fallback mechanisms
-5. **User-Centered Design**: Involve end-users throughout the development process
+def minimum_sample_size(
+    effect_size: float,
+    alpha: float = 0.05,
+    power: float = 0.80,
+) -> int:
+    """
+    Calculate minimum sample size for detecting an effect.
 
-</div>
+    Args:
+        effect_size: Cohen's d effect size you want to detect
+        alpha: Significance level (type I error rate)
+        power: Statistical power (1 - type II error rate)
 
-### Project Management Insights
+    Returns:
+        Minimum n per group
+    """
+    from statsmodels.stats.power import TTestIndPower
+    analysis = TTestIndPower()
+    n = analysis.solve_power(
+        effect_size=effect_size,
+        alpha=alpha,
+        power=power,
+        ratio=1.0
+    )
+    return math.ceil(n)
 
-#### Successful Approaches
-1. **Agile Development**: Iterative development with frequent user feedback
-2. **Cross-functional Teams**: Collaboration between robotics, AI, and domain experts
-3. **Phased Rollout**: Gradual deployment with continuous monitoring
-4. **Stakeholder Engagement**: Regular communication with all stakeholders
-5. **Risk Management**: Proactive identification and mitigation of risks
 
-#### Challenges Overcome
-1. **Technology Integration**: Successfully integrating diverse technologies
-2. **Real-time Performance**: Meeting demanding real-time requirements
-3. **User Acceptance**: Building trust and acceptance among users
-4. **Regulatory Compliance**: Meeting industry-specific regulations
-5. **Scalability**: Designing systems that scale effectively
+# Example usage
+if __name__ == '__main__':
+    import math
 
-## Hardware vs Simulation Comparison
+    # Calculate minimum trials needed before you start
+    n_min = minimum_sample_size(effect_size=0.5, alpha=0.05, power=0.80)
+    print(f"Minimum trials per condition: {n_min}")
 
-### Performance Differences
+    # Simulate results from two conditions
+    np.random.seed(42)
+    baseline_times = np.random.normal(180, 30, n_min).tolist()  # 3min avg
+    improved_times = np.random.normal(150, 25, n_min).tolist()  # 2.5min avg
 
-Based on your preferences regarding hardware vs simulation:
+    result = compare_conditions(
+        baseline_times, improved_times,
+        "Baseline (rule-based)", "VLA Model"
+    )
 
-#### Simulation Advantages
-- **Development Speed**: 3x faster iteration cycles
-- **Cost Efficiency**: 80% cost reduction in early phases
-- **Safety**: No risk of physical damage during testing
-- **Repeatability**: Consistent conditions for testing
-- **Scalability**: Easy to test multiple scenarios
+    print("\nComparison Results:")
+    for key in ["Baseline (rule-based)", "VLA Model"]:
+        print(f"  {key}: {result[key]['formatted']}")
+    print(f"\n  {result['interpretation']}")
+```
 
-#### Real Hardware Advantages
-- **Accuracy**: More realistic performance metrics
-- **Sensor Fidelity**: Actual sensor behavior and noise
-- **Environmental Factors**: Real lighting, surfaces, and conditions
-- **Human Interaction**: Authentic user experience
-- **System Integration**: Complete hardware-software integration
+## Visualization
 
-### Transition Strategy Results
+```python
+#!/usr/bin/env python3
+"""
+Robotics results visualization.
+Generates publication-quality plots.
+"""
 
-#### Simulation-to-Reality Success Factors
-1. **Domain Randomization**: Improved real-world performance by 23%
-2. **System Identification**: Better simulation accuracy by 31%
-3. **Progressive Transfer**: Smoother transitions with 15% less tuning
-4. **Robust Control**: 28% improvement in real-world reliability
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+from typing import List, Dict, Optional
+import seaborn as sns
 
-## Conclusion and Recommendations
 
-### Key Takeaways
+def plot_success_rates_comparison(
+    results: Dict[str, Dict[str, float]],
+    title: str = "Task Success Rate by Method",
+    output_path: Optional[str] = None,
+):
+    """
+    Bar chart comparing success rates across methods.
 
-1. **Integration Success**: All projects successfully integrated ROS 2, Gazebo, NVIDIA Isaac, and VLA models
-2. **Real-World Impact**: Demonstrated measurable benefits in actual deployments
-3. **Technical Innovation**: Advanced the state-of-the-art in multiple domains
-4. **Commercial Viability**: Proven economic value and market potential
-5. **User Acceptance**: Achieved high levels of user satisfaction and adoption
+    Args:
+        results: {method_name: {'rate': 0.85, 'ci_lower': 0.79, 'ci_upper': 0.91}}
+    """
+    fig, ax = plt.subplots(figsize=(10, 6))
 
-### Recommendations for Future Projects
+    methods = list(results.keys())
+    rates = [results[m]['rate'] for m in methods]
+    errors = [
+        [results[m]['rate'] - results[m]['ci_lower'] for m in methods],
+        [results[m]['ci_upper'] - results[m]['rate'] for m in methods],
+    ]
 
-1. **Invest in Simulation**: High-quality simulation reduces real-world development time
-2. **Focus on Safety**: Safety systems should be designed from the ground up
-3. **Plan for Integration**: Design systems with integration in mind from the beginning
-4. **Engage Users Early**: User feedback should drive development decisions
-5. **Consider Scalability**: Design for scaling from the initial implementation
+    colors = sns.color_palette("husl", len(methods))
+    bars = ax.bar(methods, rates, yerr=errors, capsize=5, color=colors,
+                  alpha=0.8, error_kw={'linewidth': 2})
 
-### Final Thoughts
+    # Add value labels on bars
+    for bar, rate in zip(bars, rates):
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            bar.get_height() + 0.02,
+            f'{rate:.1%}',
+            ha='center', va='bottom', fontweight='bold', fontsize=12
+        )
 
-The capstone projects have demonstrated that integrating ROS 2, Gazebo, NVIDIA Isaac, and VLA models creates powerful, capable robotic systems that can operate effectively in real-world environments. The combination of robust software frameworks, advanced AI capabilities, and careful system design has produced systems that are not only technically impressive but also practically useful.
+    ax.set_ylim(0, 1.15)
+    ax.set_ylabel('Success Rate', fontsize=13)
+    ax.set_title(title, fontsize=14, fontweight='bold')
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: f'{y:.0%}'))
+    ax.grid(axis='y', alpha=0.3)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
 
-The success of these projects validates the approach of building on established platforms while pushing the boundaries of what's possible with current technology. As robotics continues to evolve, these foundations will enable even more sophisticated and capable systems.
+    plt.tight_layout()
 
-The lessons learned from these projects provide a roadmap for future development in robotics, emphasizing the importance of integration, safety, user experience, and continuous improvement. With the right approach and commitment, robotics can address real-world challenges and improve lives across many domains.
+    if output_path:
+        plt.savefig(output_path, dpi=300, bbox_inches='tight')
+        print(f"Plot saved to {output_path}")
+    else:
+        plt.show()
+
+    return fig
+
+
+def plot_completion_time_distribution(
+    times_by_method: Dict[str, List[float]],
+    title: str = "Task Completion Time Distribution",
+    output_path: Optional[str] = None,
+):
+    """Box plot of completion times across methods."""
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    methods = list(times_by_method.keys())
+    data = [times_by_method[m] for m in methods]
+
+    bp = ax.boxplot(data, labels=methods, patch_artist=True,
+                    medianprops={'linewidth': 2, 'color': 'black'})
+
+    colors = sns.color_palette("husl", len(methods))
+    for patch, color in zip(bp['boxes'], colors):
+        patch.set_facecolor(color)
+        patch.set_alpha(0.7)
+
+    # Overlay individual data points (jittered)
+    for i, (method, values) in enumerate(times_by_method.items()):
+        x = np.random.normal(i + 1, 0.05, size=len(values))
+        ax.scatter(x, values, alpha=0.4, s=20, color=colors[i], zorder=3)
+
+    ax.set_ylabel('Completion Time (seconds)', fontsize=13)
+    ax.set_title(title, fontsize=14, fontweight='bold')
+    ax.grid(axis='y', alpha=0.3)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+
+    plt.tight_layout()
+
+    if output_path:
+        plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    else:
+        plt.show()
+
+    return fig
+
+
+def plot_learning_curve(
+    episodes: List[int],
+    success_rates: List[float],
+    confidence_intervals: Optional[List[Tuple[float, float]]] = None,
+    title: str = "Learning Curve",
+    output_path: Optional[str] = None,
+):
+    """Plot VLA model performance improvement over training."""
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    ax.plot(episodes, success_rates, 'b-', linewidth=2, label='Success Rate')
+    ax.scatter(episodes, success_rates, color='blue', s=50, zorder=5)
+
+    if confidence_intervals:
+        lower = [ci[0] for ci in confidence_intervals]
+        upper = [ci[1] for ci in confidence_intervals]
+        ax.fill_between(episodes, lower, upper, alpha=0.2, color='blue',
+                        label='95% CI')
+
+    ax.set_xlabel('Training Episodes', fontsize=13)
+    ax.set_ylabel('Task Success Rate', fontsize=13)
+    ax.set_title(title, fontsize=14, fontweight='bold')
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: f'{y:.0%}'))
+    ax.set_ylim(0, 1.05)
+    ax.legend(fontsize=11)
+    ax.grid(alpha=0.3)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+
+    plt.tight_layout()
+
+    if output_path:
+        plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    else:
+        plt.show()
+
+    return fig
+
+
+# Example: Generate evaluation plots
+if __name__ == '__main__':
+    # Success rate comparison
+    results = {
+        'Rule-Based': {'rate': 0.71, 'ci_lower': 0.63, 'ci_upper': 0.78},
+        'Octo (zero-shot)': {'rate': 0.68, 'ci_lower': 0.60, 'ci_upper': 0.75},
+        'OpenVLA (zero-shot)': {'rate': 0.82, 'ci_lower': 0.75, 'ci_upper': 0.88},
+        'OpenVLA (fine-tuned)': {'rate': 0.91, 'ci_lower': 0.85, 'ci_upper': 0.95},
+    }
+    plot_success_rates_comparison(
+        results,
+        title="Pick-and-Place Success Rate by Method",
+        output_path="success_rates.png"
+    )
+
+    # Completion time comparison
+    np.random.seed(42)
+    times = {
+        'Rule-Based': np.random.normal(180, 40, 50).clip(60, 400).tolist(),
+        'OpenVLA (fine-tuned)': np.random.normal(130, 25, 50).clip(60, 250).tolist(),
+    }
+    plot_completion_time_distribution(
+        times,
+        title="Task Completion Time: Rule-Based vs VLA",
+        output_path="completion_times.png"
+    )
+```
+
+## Writing Your Results Section
+
+### Structure for Academic Reporting
+
+```
+4. RESULTS
+4.1 Experimental Setup
+    - Hardware: robot model, sensors, compute
+    - Software: ROS 2 version, VLA model, libraries
+    - Evaluation scenarios: n=X trials per condition
+    - Baseline: what you're comparing against
+
+4.2 Task Completion Performance
+    - Primary metric: success rate with CI
+    - Secondary metrics: time, efficiency
+
+4.3 Ablation Studies
+    - Impact of each component
+    - "What happens if we remove X?"
+
+4.4 Failure Mode Analysis
+    - Distribution of failure types
+    - Representative failure examples
+
+4.5 Comparison with Baselines
+    - Statistical significance tests
+    - Effect sizes
+
+4.6 Discussion
+    - What works well and why
+    - Limitations and failure modes
+    - Sim-to-real gap (if applicable)
+```
+
+### Example Results Table
+
+| Method | Success Rate | Avg Time (s) | Collision Rate |
+|--------|-------------|--------------|---------------|
+| Rule-Based | 71% ± 6% | 185 ± 42 | 2.1% |
+| Octo (zero-shot) | 68% ± 6% | 210 ± 55 | 0.8% |
+| OpenVLA (zero-shot) | 82% ± 5% | 160 ± 35 | 0.4% |
+| **OpenVLA (fine-tuned)** | **91% ± 4%** | **132 ± 28** | **0.2%** |
+
+*Table: Task completion metrics across methods (n=50 trials each, 95% CI). Best results in bold.*
+
+## Video Demonstration Guide
+
+A compelling video is essential for capstone presentations:
+
+**Recording checklist:**
+- [ ] Multiple camera angles (overview + close-up wrist cam)
+- [ ] 3-5 successful trials of different tasks
+- [ ] 1-2 failure cases with recovery (shows robustness)
+- [ ] Side-by-side: baseline vs your method
+- [ ] Annotated overlay: show VLA inference, action prediction
+- [ ] B-roll: RViz visualization, Isaac Sim view
+
+**Video structure (recommended 3-5 minutes):**
+1. (0:00-0:30) Problem statement and motivation
+2. (0:30-1:30) System overview with architecture diagram
+3. (1:30-3:30) Live demonstration runs
+4. (3:30-4:30) Quantitative results summary
+5. (4:30-5:00) Limitations and future work
+
+## Presentation Template
+
+```markdown
+# [Project Title]
+
+## Motivation (1 slide)
+- What problem does this solve?
+- Why is it hard? Why does it matter?
+
+## System Architecture (1-2 slides)
+- Block diagram of all components
+- Integration overview
+
+## Key Technical Contributions (2-3 slides)
+- What's novel about your approach?
+- Technical details of the most important components
+
+## Experimental Setup (1 slide)
+- Environment, hardware, baselines
+- Evaluation protocol
+
+## Results (2-3 slides)
+- Main table: success rate, time, safety
+- Key plots: learning curves, failure mode distribution
+- Video demo (embedded or linked)
+
+## Lessons Learned (1 slide)
+- What worked better/worse than expected?
+- What would you do differently?
+
+## Future Work (1 slide)
+- 3 concrete next steps to improve the system
+
+## Conclusion (1 slide)
+- Summary of contributions
+- Impact on the field
+```
+
+## Summary: Evaluation Best Practices
+
+```mermaid
+graph LR
+    BP[Best Practices]
+
+    BP --> S1[Power analysis<br/>before you start<br/>Calculate min n]
+    BP --> S2[Report confidence intervals<br/>not just mean values]
+    BP --> S3[Include failure cases<br/>and failure mode analysis]
+    BP --> S4[Compare against baselines<br/>not just ablations]
+    BP --> S5[Statistical significance<br/>p-values and effect sizes]
+    BP --> S6[Record everything<br/>ROS bag files]
+    BP --> S7[Video evidence<br/>multiple trials]
+```
+
+With proper evaluation methodology, your capstone project results will be credible, reproducible, and ready for academic publication or industry deployment. The final chapter provides a comprehensive summary of everything covered and your path forward in physical AI and humanoid robotics.
