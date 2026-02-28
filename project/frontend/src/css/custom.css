@@ -174,6 +174,7 @@
 .mermaid {
   background: #ffffff !important;
   border-radius: 12px;
+  font-size: 16px !important;
   padding: 1.5rem;
   margin: 1.5rem 0;
   border: 1px solid rgba(129, 140, 248, 0.2);
@@ -196,6 +197,7 @@
 [data-theme='dark'] .mermaid .nodeLabel {
   color: #e2e8f0 !important;
   fill: #e2e8f0 !important;
+  font-size: 15px !important;
 }
 
 /* Code Blocks - Enhanced */
