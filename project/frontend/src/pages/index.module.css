@@ -1,44 +1,322 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * locally scoped CSS by default.
- */
-
+/* ── Hero Banner ─────────────────────────────────────────────── */
 .heroBanner {
-  padding: 4rem 0;
-  text-align: center;
   position: relative;
+  padding: 5rem 0 4rem;
   overflow: hidden;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-}
-
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
-}
-
-.buttons {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+  min-height: 90vh;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
 }
 
-.features {
-  padding: 4rem 0;
-  background-color: white;
+.glowLeft {
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(99,102,241,0.3) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-.features h3 {
-  color: #1a73e8;
+.glowRight {
+  position: absolute;
+  bottom: -100px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(139,92,246,0.25) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-.features p {
-  color: #555;
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
 }
 
-@media screen and (max-width: 996px) {
-  .features {
-    padding: 2rem 0;
+@media (max-width: 996px) {
+  .heroGrid {
+    grid-template-columns: 1fr;
+    text-align: center;
   }
+  .heroBanner {
+    min-height: auto;
+    padding: 3rem 0;
+  }
+}
+
+/* ── Hero Text ───────────────────────────────────────────────── */
+.heroText {
+  z-index: 1;
+}
+
+.badge {
+  display: inline-block;
+  background: rgba(99,102,241,0.2);
+  border: 1px solid rgba(99,102,241,0.4);
+  color: #a5b4fc;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.05em;
+}
+
+.heroTitle {
+  font-size: 3.2rem;
+  font-weight: 800;
+  color: #f1f5f9;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 996px) {
+  .heroTitle { font-size: 2.2rem; }
+}
+
+.gradientText {
+  background: linear-gradient(135deg, #6366f1, #a855f7, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.heroSubtitle {
+  font-size: 1.1rem;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-bottom: 1.75rem;
+  max-width: 500px;
+}
+
+@media (max-width: 996px) {
+  .heroSubtitle { margin: 0 auto 1.75rem; }
+}
+
+.techBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 996px) {
+  .techBadges { justify-content: center; }
+}
+
+.techBadge {
+  background: rgba(15,23,42,0.6);
+  border: 1px solid rgba(99,102,241,0.3);
+  color: #c7d2fe;
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.heroButtons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 996px) {
+  .heroButtons { justify-content: center; }
+}
+
+/* ── Hero Image ──────────────────────────────────────────────── */
+.heroImageWrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+.imageGlowRing {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.robotImg {
+  width: 100%;
+  max-width: 400px;
+  height: 480px;
+  object-fit: cover;
+  border-radius: 24px;
+  border: 2px solid rgba(99,102,241,0.4);
+  box-shadow:
+    0 0 60px rgba(99,102,241,0.3),
+    0 25px 60px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.robotImg:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow:
+    0 0 80px rgba(99,102,241,0.45),
+    0 35px 70px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 996px) {
+  .robotImg { max-width: 300px; height: 360px; }
+}
+
+.imageCaption {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: #64748b;
+  font-style: italic;
+}
+
+/* Floating cards on image */
+.floatCard {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(15,23,42,0.9);
+  border: 1px solid rgba(99,102,241,0.4);
+  color: #e2e8f0;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+  white-space: nowrap;
+}
+
+.floatCardTop {
+  top: 20px;
+  right: -10px;
+}
+
+.floatCardBottom {
+  bottom: 60px;
+  left: -10px;
+}
+
+.floatCardIcon {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 996px) {
+  .floatCard { display: none; }
+}
+
+/* ── Features Section ────────────────────────────────────────── */
+.featuresSection {
+  padding: 5rem 0;
+  background: #0f172a;
+}
+
+.sectionTitle {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 3rem;
+}
+
+.featureCard {
+  background: rgba(30,41,59,0.6);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  height: 100%;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.featureCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(99,102,241,0.5);
+}
+
+.featureIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.featureCard h3 {
+  color: #e2e8f0;
+  margin-bottom: 0.75rem;
+}
+
+.featureCard p {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* ── Curriculum Section ──────────────────────────────────────── */
+.curriculumSection {
+  padding: 5rem 0;
+  background: rgba(15,23,42,0.8);
+  border-top: 1px solid rgba(99,102,241,0.1);
+  border-bottom: 1px solid rgba(99,102,241,0.1);
+}
+
+.curriculumItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  background: rgba(30,41,59,0.4);
+  border-radius: 12px;
+  border: 1px solid rgba(99,102,241,0.15);
+  transition: border-color 0.2s;
+}
+
+.curriculumItem:hover {
+  border-color: rgba(99,102,241,0.4);
+}
+
+.curriculumIcon {
+  font-size: 1.75rem;
+  flex-shrink: 0;
+}
+
+.curriculumItem h4 {
+  color: #e2e8f0;
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+}
+
+.curriculumItem p {
+  color: #94a3b8;
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+/* ── CTA Section ─────────────────────────────────────────────── */
+.ctaSection {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+}
+
+.ctaTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #f1f5f9;
+  margin-bottom: 1rem;
+}
+
+.ctaSubtitle {
+  font-size: 1.1rem;
+  color: #94a3b8;
+  margin-bottom: 2.5rem;
 }
