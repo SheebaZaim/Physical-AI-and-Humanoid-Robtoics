@@ -1,41 +1,25 @@
-# Website
+---
+title: Physical AI & Humanoid Robotics Book
+emoji: 🤖
+colorFrom: blue
+colorTo: purple
+sdk: docker
+pinned: false
+app_port: 7860
+---
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+# Physical AI & Humanoid Robotics Book Platform
 
-## Installation
+Backend API for the Physical AI & Humanoid Robotics educational book platform.
 
-```bash
-yarn
-```
+Built with FastAPI + Qdrant + Gemini embeddings + OpenRouter (RAG chatbot).
 
-## Local Development
+## API Endpoints
 
-```bash
-yarn start
-```
+- `GET /health` — Health check
+- `POST /api/v1/chat/public-ask` — RAG chatbot (no auth required)
+- `POST /api/v1/translation/translate` — Urdu translation
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+## Frontend
 
-## Build
-
-```bash
-yarn build
-```
-
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-## Deployment
-
-Using SSH:
-
-```bash
-USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```bash
-GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+Deployed at Vercel: [Physical AI Book](https://physical-ai-and-humanoid-robtoics.vercel.app)
